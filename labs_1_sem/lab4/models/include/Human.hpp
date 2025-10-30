@@ -2,7 +2,6 @@
 #include <iostream>
 #include <string>
 #include <iomanip>
-#include<string>
 using namespace std;
 
 class Human {
@@ -17,6 +16,8 @@ public:
     virtual ~Human();
     
     Human& operator=(const Human& other);
+    bool operator==(const Human& other) const;
+    bool operator<(const Human& other) const;
     friend ostream& operator<<(ostream& os, const Human& human);
     friend istream& operator>>(istream& is, Human& human);
     

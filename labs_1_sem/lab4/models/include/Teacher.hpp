@@ -1,6 +1,5 @@
 #pragma once
 #include "Human.hpp"
-#include<string>
 using namespace std;
 
 #define SCIENTIFIC_WORKS_SIZE 5
@@ -19,6 +18,8 @@ public:
     ~UniversityTeacher();
     
     UniversityTeacher& operator=(const UniversityTeacher& other);
+    bool operator==(const UniversityTeacher& other) const;
+    bool operator<(const UniversityTeacher& other) const;
     friend ostream& operator<<(ostream& os, const UniversityTeacher& teacher);
     friend istream& operator>>(istream& is, UniversityTeacher& teacher);
     

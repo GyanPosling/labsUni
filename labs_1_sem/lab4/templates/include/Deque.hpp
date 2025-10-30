@@ -1,6 +1,8 @@
 #pragma once
 #include <cstddef>
-#include <stdexcept>
+#include <algorithm>
+
+using namespace std;
 
 template<typename T>
 struct DequeNode {
@@ -14,7 +16,7 @@ class Deque {
 private:
     DequeNode<T>* top;
     DequeNode<T>* bottom;
-    size_t currentSize;
+    int currentSize;
 
 public:
     Deque() {
@@ -47,7 +49,9 @@ public:
     }
     
     ~Deque() {
-        this->clearDeque();
+        while (!this->isEmpty()) {
+            this->popFront();
+        }
     }
     
     void pushFront(const T& value) {
@@ -78,7 +82,7 @@ public:
     
     void popFront() {
         if (this->isEmpty()) {
-            throw std::runtime_error("Cannot pop from empty deque");
+            return;
         }
         
         DequeNode<T>* temp = this->top;
@@ -96,7 +100,7 @@ public:
     
     void popBack() {
         if (this->isEmpty()) {
-            throw std::runtime_error("Cannot pop from empty deque");
+            return;
         }
         
         DequeNode<T>* temp = this->bottom;
@@ -113,30 +117,18 @@ public:
     }
     
     T& peekFirst() {
-        if (this->isEmpty()) {
-            throw std::runtime_error("Deque is empty");
-        }
         return this->top->value;
     }
     
     const T& peekFirst() const {
-        if (this->isEmpty()) {
-            throw std::runtime_error("Deque is empty");
-        }
         return this->top->value;
     }
     
     T& peekLast() {
-        if (this->isEmpty()) {
-            throw std::runtime_error("Deque is empty");
-        }
         return this->bottom->value;
     }
     
     const T& peekLast() const {
-        if (this->isEmpty()) {
-            throw std::runtime_error("Deque is empty");
-        }
         return this->bottom->value;
     }
     
@@ -144,7 +136,7 @@ public:
         return this->currentSize == 0;
     }
     
-    size_t size() const {
+    int size() const {
         return this->currentSize;
     }
     
@@ -152,5 +144,33 @@ public:
         while (!this->isEmpty()) {
             this->popFront();
         }
+    }
+    
+    DequeNode<T>* find(const T& value) const {
+        DequeNode<T>* current = this->top;
+        while (current != nullptr) {
+            if (current->value == value) {
+                return current;
+            }
+            current = current->next;
+        }
+        return nullptr;
+    }
+    
+    void sort() {
+        if (this->isEmpty() || this->top->next == nullptr) return;
+        
+        short swapped;
+        do {
+            swapped = 0;
+            DequeNode<T>* current = this->top;
+            while (current->next != nullptr) {
+                if (current->next->value < current->value) {
+                    swap(current->value, current->next->value);
+                    swapped = 1;
+                }
+                current = current->next;
+            }
+        } while (swapped);
     }
 };

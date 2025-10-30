@@ -1,11 +1,10 @@
 #pragma once
 #include "Human.hpp"
-#include<string>
 using namespace std;
 
 #define AUTOBIOGRAPHY_SIZE 10
 
-class CommissionMember :virtual public Human {
+class CommissionMember : virtual public Human {
 protected:
     string commissionName;
     int appointmentYear;
@@ -19,6 +18,8 @@ public:
     ~CommissionMember();
     
     CommissionMember& operator=(const CommissionMember& other);
+    bool operator==(const CommissionMember& other) const;
+    bool operator<(const CommissionMember& other) const;
     friend ostream& operator<<(ostream& os, const CommissionMember& member);
     friend istream& operator>>(istream& is, CommissionMember& member);
     

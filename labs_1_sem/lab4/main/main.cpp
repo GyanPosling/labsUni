@@ -1,85 +1,13 @@
 #include <iostream>
 #include <string>
 #include <iomanip>
+#include <algorithm>
 #include "../models/include/Human.hpp"
 #include "../models/include/Teacher.hpp"
 #include "../models/include/CommissionMember.hpp"
 #include "../models/include/TeacherCommissionMember.hpp"
 #include "../templates/include/Deque.hpp"
 using namespace std;
-
-void printObjectDetails(const Human* h, const string& label = "") {
-    if (!label.empty()) {
-        cout << "=== " << label << " ===" << endl;
-    }
-    cout << "Last Name: " << h->getLastName() << endl;
-    cout << "First Name: " << h->getFirstName() << endl;
-    cout << "Middle Name: " << h->getMiddleName() << endl;
-    cout << "Birth Year: " << h->getBirthYear() << endl;
-
-    UniversityTeacher* t = dynamic_cast<UniversityTeacher*>(const_cast<Human*>(h));
-    if (t) {
-        cout << "Position: " << t->getPosition() << endl;
-        cout << "Academic Degree: " << t->getAcademicDegree() << endl;
-        cout << "Specialty: " << t->getSpecialty() << endl;
-        cout << "Scientific Works (" << t->getScientificWorksCount() << "): ";
-        for (int i = 0; i < t->getScientificWorksCount(); ++i) {
-            if (i > 0) cout << ", ";
-            cout << t->getScientificWork(i);
-        }
-        cout << endl;
-    }
-
-    CommissionMember* c = dynamic_cast<CommissionMember*>(const_cast<Human*>(h));
-    if (c) {
-        cout << "Commission Name: " << c->getCommissionName() << endl;
-        cout << "Appointment Year: " << c->getAppointmentYear() << endl;
-        cout << "Certificate Number: " << c->getCertificateNumber() << endl;
-        cout << "Autobiography (" << c->getAutobiographyCount() << "): ";
-        for (int i = 0; i < c->getAutobiographyCount(); ++i) {
-            if (i > 0) cout << ", ";
-            cout << c->getAutobiography(i);
-        }
-        cout << endl;
-    }
-
-    TeacherCommissionMember* tcm = dynamic_cast<TeacherCommissionMember*>(const_cast<Human*>(h));
-    if (tcm) {
-        cout << "Commission Works (" << tcm->getCommissionWorksCount() << "): ";
-        for (int i = 0; i < tcm->getCommissionWorksCount(); ++i) {
-            if (i > 0) cout << ", ";
-            cout << tcm->getCommissionWork(i);
-        }
-        cout << endl;
-    }
-    cout << "-------------------" << endl;
-}
-
-void printDeque(Deque<Human*>& dq) {
-    if (dq.isEmpty()) {
-        cout << "Deque is empty." << endl;
-        return;
-    }
-    Deque<Human*> temp;
-    int index = 1;
-    cout << "===== Deque Contents (Front to Back) =====" << endl;
-    while (!dq.isEmpty()) {
-        Human* h = dq.peekFirst();
-        string label = "Object " + to_string(index);
-        if (index == 1) label += " (Front)";
-        printObjectDetails(h, label);
-        dq.popFront();
-        temp.pushBack(h);
-        index++;
-    }
-    // Restore original Deque
-    while (!temp.isEmpty()) {
-        Human* h = temp.peekLast();
-        temp.popBack();
-        dq.pushFront(h);
-    }
-    cout << "===== End of Deque =====" << endl;
-}
 
 void drawMenu(const string& title, const string options[], int numOptions) {
     int max_len = title.length();
@@ -107,32 +35,59 @@ int getChoice(int max) {
     return choice;
 }
 
-void addObject(Deque<Human*>& dq, bool front) {
-    string options[3] = {"1. Teacher", "2. Commission Member", "3. Teacher Commission Member"};
-    drawMenu("Select Type to Add", options, 3);
-    int choice = getChoice(3);
-    Human* obj = nullptr;
-    if (choice == 1) {
-        UniversityTeacher* t = new UniversityTeacher();
-        cin >> *t;
-        obj = t;
-    } else if (choice == 2) {
-        CommissionMember* c = new CommissionMember();
-        cin >> *c;
-        obj = c;
+void addObject(Deque<Human*>& deque) {
+    string sideOptions[2] = {"1. Add to Front", "2. Add to Back"};
+    drawMenu("Select Side", sideOptions, 2);
+    int sideChoice = getChoice(2);
+    
+    string typeOptions[3] = {"1. Teacher", "2. Commission Member", "3. Teacher Commission Member"};
+    drawMenu("Select Type", typeOptions, 3);
+    int typeChoice = getChoice(3);
+    
+    Human* object = nullptr;
+    if (typeChoice == 1) {
+        UniversityTeacher* teacher = new UniversityTeacher();
+        cin >> *teacher;
+        object = teacher;
+    } else if (typeChoice == 2) {
+        CommissionMember* commissionMember = new CommissionMember();
+        cin >> *commissionMember;
+        object = commissionMember;
     } else {
-        TeacherCommissionMember* tcm = new TeacherCommissionMember();
-        cin >> *tcm;
-        obj = tcm;
+        TeacherCommissionMember* teacherCommissionMember = new TeacherCommissionMember();
+        cin >> *teacherCommissionMember;
+        object = teacherCommissionMember;
     }
-    if (front) {
-        dq.pushFront(obj);
+    
+    if (sideChoice == 1) {
+        deque.pushFront(object);
     } else {
-        dq.pushBack(obj);
+        deque.pushBack(object);
     }
 }
 
-void updateHumanFields(Human* h) {
+void removeObject(Deque<Human*>& deque) {
+    string options[2] = {"1. Remove from Front", "2. Remove from Back"};
+    drawMenu("Remove Object", options, 2);
+    int choice = getChoice(2);
+    
+    if (deque.isEmpty()) {
+        cout << "Deque is empty." << endl;
+        return;
+    }
+    
+    if (choice == 1) {
+        delete deque.peekFirst();
+        deque.popFront();
+        cout << "Removed from front." << endl;
+    } else {
+        delete deque.peekLast();
+        deque.popBack();
+        cout << "Removed from back." << endl;
+    }
+}
+
+void updateHumanFields(Human* human) {
     string str;
     int num;
     string options[4] = {"1. First Name", "2. Last Name", "3. Middle Name", "4. Birth Year"};
@@ -141,23 +96,23 @@ void updateHumanFields(Human* h) {
     if (choice == 1) {
         cout << "New first name: ";
         cin >> str;
-        h->setFirstName(str);
+        human->setFirstName(str);
     } else if (choice == 2) {
         cout << "New last name: ";
         cin >> str;
-        h->setLastName(str);
+        human->setLastName(str);
     } else if (choice == 3) {
         cout << "New middle name: ";
         cin >> str;
-        h->setMiddleName(str);
+        human->setMiddleName(str);
     } else {
         cout << "New birth year: ";
         cin >> num;
-        h->setBirthYear(num);
+        human->setBirthYear(num);
     }
 }
 
-void updateTeacherFields(UniversityTeacher* t) {
+void updateTeacherFields(UniversityTeacher* teacher) {
     string str;
     int num;
     string options[5] = {"1. Position", "2. Degree", "3. Specialty", "4. Add Scientific Work", "5. Replace All Scientific Works"};
@@ -166,19 +121,19 @@ void updateTeacherFields(UniversityTeacher* t) {
     if (choice == 1) {
         cout << "New position: ";
         cin >> str;
-        t->setPosition(str);
+        teacher->setPosition(str);
     } else if (choice == 2) {
         cout << "New degree: ";
         cin >> str;
-        t->setAcademicDegree(str);
+        teacher->setAcademicDegree(str);
     } else if (choice == 3) {
         cout << "New specialty: ";
         cin >> str;
-        t->setSpecialty(str);
+        teacher->setSpecialty(str);
     } else if (choice == 4) {
         cout << "New scientific work: ";
         cin >> str;
-        t->addScientificWork(str);
+        teacher->addScientificWork(str);
     } else {
         cout << "Enter number of scientific works (0-5): ";
         cin >> num;
@@ -186,12 +141,12 @@ void updateTeacherFields(UniversityTeacher* t) {
         for (int i = 0; i < num; i++) {
             cout << "Scientific work " << i+1 << ": ";
             cin >> str;
-            t->setScientificWork(i, str);
+            teacher->setScientificWork(i, str);
         }
     }
 }
 
-void updateCommissionFields(CommissionMember* c) {
+void updateCommissionFields(CommissionMember* commissionMember) {
     string str;
     int num;
     string options[5] = {"1. Commission Name", "2. Appointment Year", "3. Certificate Number", "4. Add Autobiography", "5. Replace All Autobiography"};
@@ -200,19 +155,19 @@ void updateCommissionFields(CommissionMember* c) {
     if (choice == 1) {
         cout << "New commission name: ";
         cin >> str;
-        c->setCommissionName(str);
+        commissionMember->setCommissionName(str);
     } else if (choice == 2) {
         cout << "New appointment year: ";
         cin >> num;
-        c->setAppointmentYear(num);
+        commissionMember->setAppointmentYear(num);
     } else if (choice == 3) {
         cout << "New certificate number: ";
         cin >> str;
-        c->setCertificateNumber(str);
+        commissionMember->setCertificateNumber(str);
     } else if (choice == 4) {
         cout << "New autobiography: ";
         cin >> str;
-        c->addAutobiography(str);
+        commissionMember->addAutobiography(str);
     } else {
         cout << "Enter number of autobiography (0-10): ";
         cin >> num;
@@ -220,12 +175,12 @@ void updateCommissionFields(CommissionMember* c) {
         for (int i = 0; i < num; i++) {
             cout << "Autobiography " << i+1 << ": ";
             cin >> str;
-            c->setAutobiography(i, str);
+            commissionMember->setAutobiography(i, str);
         }
     }
 }
 
-void updateTCMExtraFields(TeacherCommissionMember* tcm) {
+void updateTeacherCommissionMemberFields(TeacherCommissionMember* teacherCommissionMember) {
     string str;
     int num;
     string options[2] = {"1. Add Commission Work", "2. Replace All Commission Works"};
@@ -234,7 +189,7 @@ void updateTCMExtraFields(TeacherCommissionMember* tcm) {
     if (choice == 1) {
         cout << "New commission work: ";
         cin >> str;
-        tcm->addCommissionWork(str);
+        teacherCommissionMember->addCommissionWork(str);
     } else {
         cout << "Enter number of commission works (0-5): ";
         cin >> num;
@@ -242,102 +197,239 @@ void updateTCMExtraFields(TeacherCommissionMember* tcm) {
         for (int i = 0; i < num; i++) {
             cout << "Commission work " << i+1 << ": ";
             cin >> str;
-            tcm->setCommissionWork(i, str);
+            teacherCommissionMember->setCommissionWork(i, str);
         }
     }
 }
 
-void modifyObject(Human* h) {
-    string modifyOptions[2] = {"1. Change All", "2. Change Specific Field"};
-    drawMenu("Modify Options", modifyOptions, 2);
-    int choice = getChoice(2);
-    if (choice == 1) {
-        cin >> *h;
-        return;
-    }
-    TeacherCommissionMember* tcm = dynamic_cast<TeacherCommissionMember*>(h);
-    UniversityTeacher* t = dynamic_cast<UniversityTeacher*>(h);
-    CommissionMember* c = dynamic_cast<CommissionMember*>(h);
-    int numFieldOptions = 1;
-    string fieldOptions[4];
-    fieldOptions[0] = "1. Human Fields";
-    if (t) {
-        fieldOptions[numFieldOptions++] = "2. Teacher Fields";
-    }
-    if (c) {
-        fieldOptions[numFieldOptions++] = "3. Commission Fields";
-    }
-    if (tcm) {
-        fieldOptions[numFieldOptions++] = "4. TCM Extra Fields";
-    }
-    drawMenu("Select Field Category", fieldOptions, numFieldOptions);
-    choice = getChoice(numFieldOptions);
-    if (choice == 1) {
-        updateHumanFields(h);
-    } else if (choice == 2 && t) {
-        if (tcm && numFieldOptions > 3) {
-            if (choice == 2) updateTeacherFields(t);
-            else if (choice == 3) updateCommissionFields(c);
-            else if (choice == 4) updateTCMExtraFields(tcm);
-        } else if (tcm) {
-            if (choice == 2) updateTeacherFields(t);
-            else if (choice == 3) updateCommissionFields(c);
-        } else {
-            updateTeacherFields(t);
-        }
-    } else if (choice == 3 && c && !tcm) {
-        updateCommissionFields(c);
-    }
-}
-
-void modifyFirstOrLast(Deque<Human*>& dq, bool first) {
-    if (dq.isEmpty()) {
+void modifyObject(Deque<Human*>& deque) {
+    string sideOptions[2] = {"1. Modify First", "2. Modify Last"};
+    drawMenu("Select Object to Modify", sideOptions, 2);
+    int sideChoice = getChoice(2);
+    
+    if (deque.isEmpty()) {
         cout << "Deque is empty." << endl;
         return;
     }
-    Human* h = first ? dq.peekFirst() : dq.peekLast();
-    modifyObject(h);
-}
-
-void peekFirstOrLast(Deque<Human*>& dq, bool first) {
-    if (dq.isEmpty()) {
-        cout << "Empty" << endl;
+    
+    Human* human = (sideChoice == 1) ? deque.peekFirst() : deque.peekLast();
+    
+    TeacherCommissionMember* teacherCommissionMember = dynamic_cast<TeacherCommissionMember*>(human);
+    UniversityTeacher* teacher = dynamic_cast<UniversityTeacher*>(human);
+    CommissionMember* commissionMember = dynamic_cast<CommissionMember*>(human);
+    
+    string modifyOptions[2] = {"1. Change All Data", "2. Change Specific Field"};
+    drawMenu("Modify Options", modifyOptions, 2);
+    int modifyChoice = getChoice(2);
+    
+    if (modifyChoice == 1) {
+        if (teacherCommissionMember) {
+            cin >> *teacherCommissionMember;
+        } else if (teacher) {
+            cin >> *teacher;
+        } else if (commissionMember) {
+            cin >> *commissionMember;
+        } else {
+            cin >> *human;
+        }
         return;
     }
-    Human* h = first ? dq.peekFirst() : dq.peekLast();
-    printObjectDetails(h, (first ? "First Object" : "Last Object"));
+    
+    int numFieldOptions = 1;
+    string fieldOptions[7];
+    fieldOptions[0] = "1. Human Fields";
+    
+    if (teacher) {
+        fieldOptions[numFieldOptions++] = "2. Teacher Fields";
+    }
+    if (commissionMember) {
+        fieldOptions[numFieldOptions++] = "3. Commission Fields";
+    }
+    if (teacherCommissionMember) {
+        fieldOptions[numFieldOptions++] = "4. TCM Extra Fields";
+    }
+    
+    drawMenu("Select Field Category", fieldOptions, numFieldOptions);
+    int fieldChoice = getChoice(numFieldOptions);
+    
+    if (fieldChoice == 1) {
+        updateHumanFields(human);
+    } else if (fieldChoice == 2 && teacher) {
+        updateTeacherFields(teacher);
+    } else if (fieldChoice == 3 && commissionMember) {
+        updateCommissionFields(commissionMember);
+    } else if (fieldChoice == 4 && teacherCommissionMember) {
+        updateTeacherCommissionMemberFields(teacherCommissionMember);
+    }
 }
 
-void handleMenuChoice(int choice, Deque<Human*>& myDeque) {
-    switch (choice) {
-        case 1: addObject(myDeque, true); break;
-        case 2: addObject(myDeque, false); break;
-        case 3: if (!myDeque.isEmpty()) { delete myDeque.peekFirst(); myDeque.popFront(); } else cout << "Empty" << endl; break;
-        case 4: if (!myDeque.isEmpty()) { delete myDeque.peekLast(); myDeque.popBack(); } else cout << "Empty" << endl; break;
-        case 5: modifyFirstOrLast(myDeque, true); break;
-        case 6: modifyFirstOrLast(myDeque, false); break;
-        case 7: peekFirstOrLast(myDeque, true); break;
-        case 8: peekFirstOrLast(myDeque, false); break;
-        case 9: printDeque(myDeque); break;
-        case 10: while (!myDeque.isEmpty()) { delete myDeque.peekFirst(); myDeque.popFront(); } break;
+void peekObject(Deque<Human*>& deque) {
+    string options[2] = {"1. Peek First", "2. Peek Last"};
+    drawMenu("Peek Object", options, 2);
+    int choice = getChoice(2);
+    
+    if (deque.isEmpty()) {
+        cout << "Deque is empty." << endl;
+        return;
     }
+    
+    Human* human = (choice == 1) ? deque.peekFirst() : deque.peekLast();
+    
+    if (!deque.isEmpty()) {
+        TeacherCommissionMember tcm;
+        tcm.printHeader();
+        human->printTable();
+    }
+}
+
+void searchInDeque(Deque<Human*>& deque) {
+    if (deque.isEmpty()) {
+        cout << "Deque is empty." << endl;
+        return;
+    }
+
+    string searchOptions[3] = {"1. Search by Last Name", "2. Search by Birth Year", "3. Search by Position"};
+    drawMenu("Search Options", searchOptions, 3);
+    int choice = getChoice(3);
+
+    string searchString;
+    int searchYear;
+    
+    if (choice == 1) {
+        cout << "Enter last name to search: ";
+        cin >> searchString;
+    } else if (choice == 2) {
+        cout << "Enter birth year to search: ";
+        cin >> searchYear;
+    } else if (choice == 3) {
+        cout << "Enter position to search: ";
+        cin >> searchString;
+    }
+
+    Deque<Human*> searchResults;
+    Deque<Human*> temp;
+
+    while (!deque.isEmpty()) {
+        Human* human = deque.peekFirst();
+        deque.popFront();
+        temp.pushBack(human);
+
+        bool match = false;
+        if (choice == 1) {
+            match = (human->getLastName() == searchString);
+        } else if (choice == 2) {
+            match = (human->getBirthYear() == searchYear);
+        } else if (choice == 3) {
+            if (UniversityTeacher* teacher = dynamic_cast<UniversityTeacher*>(human)) {
+                match = (teacher->getPosition() == searchString);
+            }
+        }
+
+        if (match) {
+            searchResults.pushBack(human);
+        }
+    }
+
+    while (!temp.isEmpty()) {
+        Human* human = temp.peekFirst();
+        temp.popFront();
+        deque.pushBack(human);
+    }
+
+    if (searchResults.isEmpty()) {
+        cout << "No matches found." << endl;
+    } else {
+        cout << "Search results (" << searchResults.size() << " found):" << endl;
+        if (!searchResults.isEmpty()) {
+            TeacherCommissionMember tcm;
+            tcm.printHeader();
+            Deque<Human*> tempPrint;
+            while (!searchResults.isEmpty()) {
+                Human* human = searchResults.peekFirst();
+                searchResults.popFront();
+                human->printTable();
+                tempPrint.pushBack(human);
+            }
+            while (!tempPrint.isEmpty()) {
+                Human* human = tempPrint.peekFirst();
+                tempPrint.popFront();
+                searchResults.pushBack(human);
+            }
+        }
+    }
+}
+
+void printDeque(Deque<Human*>& deque) {
+    if (deque.isEmpty()) {
+        cout << "Deque is empty." << endl;
+        return;
+    }
+
+    if (!deque.isEmpty()) {
+        TeacherCommissionMember tcm;
+        tcm.printHeader();
+        
+        Deque<Human*> temp;
+        while (!deque.isEmpty()) {
+            Human* human = deque.peekFirst();
+            deque.popFront();
+            human->printTable();
+            temp.pushBack(human);
+        }
+
+        while (!temp.isEmpty()) {
+            Human* human = temp.peekLast();
+            temp.popBack();
+            deque.pushFront(human);
+        }
+    }
+}
+
+void clearDeque(Deque<Human*>& deque) {
+    while (!deque.isEmpty()) {
+        delete deque.peekFirst();
+        deque.popFront();
+    }
+    cout << "Deque cleared." << endl;
+}
+
+void sortDeque(Deque<Human*>& deque) {
+    deque.sort();
+    cout << "Deque sorted." << endl;
+}
+
+void run(){
+    Deque<Human*> myDeque;
+    int choice;
+    string mainMenuOptions[8] = {
+        "1. Add Object",
+        "2. Remove Object", 
+        "3. Modify Object",
+        "4. Peek Object",
+        "5. Print Deque",
+        "6. Search",
+        "7. Sort",
+        "8. Exit"
+    };
+    
+    do {
+        drawMenu("Main Menu", mainMenuOptions, 8);
+        choice = getChoice(8);
+        
+        switch (choice) {
+            case 1: addObject(myDeque); break;
+            case 2: removeObject(myDeque); break;
+            case 3: modifyObject(myDeque); break;
+            case 4: peekObject(myDeque); break;
+            case 5: printDeque(myDeque); break;
+            case 6: searchInDeque(myDeque); break;
+            case 7: sortDeque(myDeque); break;
+            case 8: clearDeque(myDeque); break;
+        }
+    } while (choice != 8);
 }
 
 int main() {
-    Deque<Human*> myDeque;
-    int choice;
-    string menuOptions[11] = {
-        "1. Push Front", "2. Push Back", "3. Pop Front", "4. Pop Back",
-        "5. Modify First", "6. Modify Last", "7. Peek First",
-        "8. Peek Last", "9. Print Deque", "10. Clear Deque", "11. Exit"
-    };
-    do {
-        drawMenu("Deque Menu", menuOptions, 11);
-        choice = getChoice(11);
-        if (choice != 11) {
-            handleMenuChoice(choice, myDeque);
-        }
-    } while (choice != 11);
-    while (!myDeque.isEmpty()) { delete myDeque.peekFirst(); myDeque.popFront(); }
+    run();
     return 0;
 }

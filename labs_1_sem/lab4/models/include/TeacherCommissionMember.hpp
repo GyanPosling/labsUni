@@ -16,6 +16,8 @@ public:
     ~TeacherCommissionMember();
     
     TeacherCommissionMember& operator=(const TeacherCommissionMember& other);
+    bool operator==(const TeacherCommissionMember& other) const;
+    bool operator<(const TeacherCommissionMember& other) const;
     friend ostream& operator<<(ostream& os, const TeacherCommissionMember& tcm);
     friend istream& operator>>(istream& is, TeacherCommissionMember& tcm);
     

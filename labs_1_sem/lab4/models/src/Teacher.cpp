@@ -2,8 +2,8 @@
 
 UniversityTeacher::UniversityTeacher() : Human(), scientificWorksCount(0) {}
 
-UniversityTeacher::UniversityTeacher(const std::string& first, const std::string& last, const std::string& middle, int year,
-                                     const std::string& pos, const std::string& degree, const std::string& spec)
+UniversityTeacher::UniversityTeacher(const string& first, const string& last, const string& middle, int year,
+                                     const string& pos, const string& degree, const string& spec)
     : Human(first, last, middle, year), position(pos), academicDegree(degree), specialty(spec), scientificWorksCount(0) {}
 
 UniversityTeacher::~UniversityTeacher() {}
@@ -11,18 +11,30 @@ UniversityTeacher::~UniversityTeacher() {}
 UniversityTeacher& UniversityTeacher::operator=(const UniversityTeacher& other) {
     if (this != &other) {
         Human::operator=(other);
-        this->position = other.position;
-        this->academicDegree = other.academicDegree;
-        this->specialty = other.specialty;
-        this->scientificWorksCount = other.scientificWorksCount;
-        for (int i = 0; i < this->scientificWorksCount; i++) {
-            this->scientificWorks[i] = other.scientificWorks[i];
+        position = other.position;
+        academicDegree = other.academicDegree;
+        specialty = other.specialty;
+        scientificWorksCount = other.scientificWorksCount;
+        for (int i = 0; i < scientificWorksCount; i++) {
+            scientificWorks[i] = other.scientificWorks[i];
         }
     }
     return *this;
 }
 
-std::ostream& operator<<(std::ostream& os, const UniversityTeacher& teacher) {
+bool UniversityTeacher::operator==(const UniversityTeacher& other) const {
+    return Human::operator==(other) &&
+           position == other.position &&
+           academicDegree == other.academicDegree &&
+           specialty == other.specialty &&
+           scientificWorksCount == other.scientificWorksCount;
+}
+
+bool UniversityTeacher::operator<(const UniversityTeacher& other) const {
+    return Human::operator<(other);
+}
+
+ostream& operator<<(ostream& os, const UniversityTeacher& teacher) {
     os << static_cast<const Human&>(teacher) << " " << teacher.position << " " << teacher.academicDegree << " " << teacher.specialty;
     for (int i = 0; i < teacher.scientificWorksCount; i++) {
         os << " " << teacher.scientificWorks[i];
@@ -30,60 +42,60 @@ std::ostream& operator<<(std::ostream& os, const UniversityTeacher& teacher) {
     return os;
 }
 
-std::istream& operator>>(std::istream& is, UniversityTeacher& teacher) {
+istream& operator>>(istream& is, UniversityTeacher& teacher) {
     is >> static_cast<Human&>(teacher);
-    std::cout << "Enter position: ";
+    cout << "Enter position: ";
     is >> teacher.position;
-    std::cout << "Enter academic degree: ";
+    cout << "Enter academic degree: ";
     is >> teacher.academicDegree;
-    std::cout << "Enter specialty: ";
+    cout << "Enter specialty: ";
     is >> teacher.specialty;
     
-    std::cout << "Enter number of scientific works (0-" << SCIENTIFIC_WORKS_SIZE << "): ";
+    cout << "Enter number of scientific works (0-" << SCIENTIFIC_WORKS_SIZE << "): ";
     is >> teacher.scientificWorksCount;
     if (teacher.scientificWorksCount > SCIENTIFIC_WORKS_SIZE) {
         teacher.scientificWorksCount = SCIENTIFIC_WORKS_SIZE;
     }
     
     for (int i = 0; i < teacher.scientificWorksCount; i++) {
-        std::cout << "Enter scientific work " << i + 1 << ": ";
+        cout << "Enter scientific work " << i + 1 << ": ";
         is >> teacher.scientificWorks[i];
     }
     
     return is;
 }
 
-std::string UniversityTeacher::getPosition() const { return this->position; }
-std::string UniversityTeacher::getAcademicDegree() const { return this->academicDegree; }
-std::string UniversityTeacher::getSpecialty() const { return this->specialty; }
-std::string UniversityTeacher::getScientificWork(int index) const { 
-    if (index >= 0 && index < this->scientificWorksCount) return this->scientificWorks[index];
+string UniversityTeacher::getPosition() const { return position; }
+string UniversityTeacher::getAcademicDegree() const { return academicDegree; }
+string UniversityTeacher::getSpecialty() const { return specialty; }
+string UniversityTeacher::getScientificWork(int index) const { 
+    if (index >= 0 && index < scientificWorksCount) return scientificWorks[index];
     return "";
 }
-int UniversityTeacher::getScientificWorksCount() const { return this->scientificWorksCount; }
+int UniversityTeacher::getScientificWorksCount() const { return scientificWorksCount; }
 int UniversityTeacher::getScientificWorksSize() const { return SCIENTIFIC_WORKS_SIZE; }
 
-void UniversityTeacher::setPosition(const std::string& pos) { this->position = pos; }
-void UniversityTeacher::setAcademicDegree(const std::string& degree) { this->academicDegree = degree; }
-void UniversityTeacher::setSpecialty(const std::string& spec) { this->specialty = spec; }
-void UniversityTeacher::setScientificWork(int index, const std::string& work) { 
+void UniversityTeacher::setPosition(const string& pos) { position = pos; }
+void UniversityTeacher::setAcademicDegree(const string& degree) { academicDegree = degree; }
+void UniversityTeacher::setSpecialty(const string& spec) { specialty = spec; }
+void UniversityTeacher::setScientificWork(int index, const string& work) { 
     if (index >= 0 && index < SCIENTIFIC_WORKS_SIZE) {
-        this->scientificWorks[index] = work;
-        if (index >= this->scientificWorksCount) {
-            this->scientificWorksCount = index + 1;
+        scientificWorks[index] = work;
+        if (index >= scientificWorksCount) {
+            scientificWorksCount = index + 1;
         }
     }
 }
-void UniversityTeacher::addScientificWork(const std::string& work) {
-    if (this->scientificWorksCount < SCIENTIFIC_WORKS_SIZE) {
-        this->scientificWorks[this->scientificWorksCount] = work;
-        this->scientificWorksCount++;
+void UniversityTeacher::addScientificWork(const string& work) {
+    if (scientificWorksCount < SCIENTIFIC_WORKS_SIZE) {
+        scientificWorks[scientificWorksCount] = work;
+        scientificWorksCount++;
     }
 }
 
 void UniversityTeacher::printHeader() const {
     cout << left;
-    cout << "| " << setw(15) << "Last Name" << " | " << setw(15) << "First Name" << " | " << setw(15) << "Middle Name" << " | " << setw(12) << "Birth Year" << " | " << setw(20) << "Position" << " | " << setw(15) << "Degree" << " | " << setw(20) << "Specialty" << " | " << setw(30) << "Scientific Works" << " | " << setw(10) << "Sci Count" << " | " << setw(20) << "Commission" << " | " << setw(15) << "Appoint Year" << " | " << setw(15) << "Certificate" << " | " << setw(30) << "Autobiography" << " | " << setw(10) << "Bio Count" << " | " << setw(30) << "Comm Works" << " | " << setw(10) << "Comm Count" << " |" << endl;
+    cout << "| " << setw(10) << "Last Name" << " | " << setw(11) << "First Name" << " | " << setw(12) << "Middle Name" << " | " << setw(11) << "Birth Year" << " | " << setw(9) << "Position" << " | " << setw(7) << "Degree" << " | " << setw(10) << "Specialty" << " | " << setw(17) << "Scientific Works" << " | " << setw(10) << "Sci Count" << " | " << setw(11) << "Commission" << " | " << setw(13) << "Appoint Year" << " | " << setw(12) << "Certificate" << " | " << setw(14) << "Autobiography" << " | " << setw(10) << "Bio Count" << " | " << setw(11) << "Comm Works" << " | " << setw(11) << "Comm Count" << " |" << endl;
 }
 
 void UniversityTeacher::printTable() const {
@@ -93,5 +105,5 @@ void UniversityTeacher::printTable() const {
         scientificWorksStr += this->scientificWorks[i];
     }
     cout << left;
-    cout << "| " << setw(15) << this->lastName << " | " << setw(15) << this->firstName << " | " << setw(15) << this->middleName << " | " << setw(12) << this->birthYear << " | " << setw(20) << this->position << " | " << setw(15) << this->academicDegree << " | " << setw(20) << this->specialty << " | " << setw(30) << scientificWorksStr << " | " << setw(10) << this->scientificWorksCount << " | " << setw(20) << " - " << " | " << setw(15) << " - " << " | " << setw(15) << " - " << " | " << setw(30) << " - " << " | " << setw(10) << " - " << " | " << setw(30) << " - " << " | " << setw(10) << " - " << " |" << endl;
+    cout << "| " << setw(10) << this->lastName << " | " << setw(11) << this->firstName << " | " << setw(12) << this->middleName << " | " << setw(11) << this->birthYear << " | " << setw(9) << this->position << " | " << setw(7) << this->academicDegree << " | " << setw(10) << this->specialty << " | " << setw(17) << scientificWorksStr << " | " << setw(10) << this->scientificWorksCount << " | " << setw(11) << " - " << " | " << setw(13) << " - " << " | " << setw(12) << " - " << " | " << setw(14) << " - " << " | " << setw(10) << " - " << " | " << setw(11) << " - " << " | " << setw(11) << " - " << " |" << endl;
 }
