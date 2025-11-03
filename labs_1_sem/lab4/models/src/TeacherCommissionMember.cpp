@@ -119,8 +119,7 @@ void TeacherCommissionMember::addCommissionWork(const string& work) {
 
 void TeacherCommissionMember::printHeader() const {
     cout << left;
-    cout << "| " << setw(10) << "Last Name" << " | " << setw(11) << "First Name" << " | " << setw(12) << "Middle Name" << " | " << setw(11) << "Birth Year" << " | " << setw(9) << "Position" << " | " << setw(7) << "Degree" << " | " << setw(10) << "Specialty" << " | " << setw(17) << "Scientific Works" << " | " << setw(10) << "Sci Count" << " | " << setw(11) << "Commission" << " | " << setw(13) << "Appoint Year" << " | " << setw(12) << "Certificate" << " | " << setw(14) << "Autobiography" << " | " << setw(10) << "Bio Count" << " | " << setw(11) << "Comm Works" << " | " << setw(11) << "Comm Count" << " |" << endl;
-}
+    cout << "| " << setw(9) << "Last Name" << " | " << setw(10) << "First Name" << " | " << setw(11) << "Middle Name" << " | " << setw(10) << "Birth Year" << " | " << setw(8) << "Position" << " | " << setw(6) << "Degree" << " | " << setw(9) << "Specialty" << " | " << setw(16) << "Scientific Works" << " | " << setw(9) << "Sci Count" << " | " << setw(10) << "Commission" << " | " << setw(12) << "Appoint Year" << " | " << setw(11) << "Certificate" << " | " << setw(13) << "Autobiography" << " | " << setw(9) << "Bio Count" << " | " << setw(10) << "Comm Works" << " | " << setw(10) << "Comm Count" << " |" << endl;}
 
 void TeacherCommissionMember::printTable() const {
     string scientificWorksStr;
@@ -139,5 +138,5 @@ void TeacherCommissionMember::printTable() const {
         commissionWorksStr += commissionWorks[i];
     }
     cout << left;
-    cout << "| " << setw(10) << getLastName() << " | " << setw(11) << getFirstName() << " | " << setw(12) << getMiddleName() << " | " << setw(11) << getBirthYear() << " | " << setw(9) << UniversityTeacher::getPosition() << " | " << setw(7) << UniversityTeacher::getAcademicDegree() << " | " << setw(10) << UniversityTeacher::getSpecialty() << " | " << setw(17) << scientificWorksStr << " | " << setw(10) << scientificWorksCount << " | " << setw(11) << CommissionMember::getCommissionName() << " | " << setw(13) << CommissionMember::getAppointmentYear() << " | " << setw(12) << CommissionMember::getCertificateNumber() << " | " << setw(14) << autobiographyStr << " | " << setw(10) << autobiographyCount << " | " << setw(11) << commissionWorksStr << " | " << setw(11) << commissionWorksCount << " |" << endl;
+    cout << "| " << setw(9) << getLastName() << " | " << setw(10) << getFirstName() << " | " << setw(11) << getMiddleName() << " | " << setw(10) << getBirthYear() << " | " << setw(8) << UniversityTeacher::getPosition() << " | " << setw(6) << UniversityTeacher::getAcademicDegree() << " | " << setw(9) << UniversityTeacher::getSpecialty() << " | " << setw(16) << scientificWorksStr << " | " << setw(9) << scientificWorksCount << " | " << setw(10) << CommissionMember::getCommissionName() << " | " << setw(12) << CommissionMember::getAppointmentYear() << " | " << setw(11) << CommissionMember::getCertificateNumber() << " | " << setw(13) << autobiographyStr << " | " << setw(9) << autobiographyCount << " | " << setw(10) << commissionWorksStr << " | " << setw(10) << commissionWorksCount << " |" << endl;
 }

@@ -95,7 +95,7 @@ void CommissionMember::addAutobiography(const string& bio) {
 
 void CommissionMember::printHeader() const {
     cout << left;
-    cout << "| " << setw(10) << "Last Name" << " | " << setw(11) << "First Name" << " | " << setw(12) << "Middle Name" << " | " << setw(11) << "Birth Year" << " | " << setw(9) << "Position" << " | " << setw(7) << "Degree" << " | " << setw(10) << "Specialty" << " | " << setw(17) << "Scientific Works" << " | " << setw(10) << "Sci Count" << " | " << setw(11) << "Commission" << " | " << setw(13) << "Appoint Year" << " | " << setw(12) << "Certificate" << " | " << setw(14) << "Autobiography" << " | " << setw(10) << "Bio Count" << " | " << setw(11) << "Comm Works" << " | " << setw(11) << "Comm Count" << " |" << endl;
+    cout << "| " << setw(9) << "Last Name" << " | " << setw(10) << "First Name" << " | " << setw(11) << "Middle Name" << " | " << setw(10) << "Birth Year" << " | " << setw(8) << "Position" << " | " << setw(6) << "Degree" << " | " << setw(9) << "Specialty" << " | " << setw(16) << "Scientific Works" << " | " << setw(9) << "Sci Count" << " | " << setw(10) << "Commission" << " | " << setw(12) << "Appoint Year" << " | " << setw(11) << "Certificate" << " | " << setw(13) << "Autobiography" << " | " << setw(9) << "Bio Count" << " | " << setw(10) << "Comm Works" << " | " << setw(10) << "Comm Count" << " |" << endl;
 }
 
 void CommissionMember::printTable() const {
@@ -105,5 +105,5 @@ void CommissionMember::printTable() const {
         autobiographyStr += this->autobiography[i];
     }
     cout << left;
-    cout << "| " << setw(10) << this->lastName << " | " << setw(11) << this->firstName << " | " << setw(12) << this->middleName << " | " << setw(11) << this->birthYear << " | " << setw(9) << " - " << " | " << setw(7) << " - " << " | " << setw(10) << " - " << " | " << setw(17) << " - " << " | " << setw(10) << " - " << " | " << setw(11) << this->commissionName << " | " << setw(13) << this->appointmentYear << " | " << setw(12) << this->certificateNumber << " | " << setw(14) << autobiographyStr << " | " << setw(10) << this->autobiographyCount << " | " << setw(11) << " - " << " | " << setw(11) << " - " << " |" << endl;
+    cout << "| " << setw(9) << this->lastName << " | " << setw(10) << this->firstName << " | " << setw(11) << this->middleName << " | " << setw(10) << this->birthYear << " | " << setw(8) << " - " << " | " << setw(6) << " - " << " | " << setw(9) << " - " << " | " << setw(16) << " - " << " | " << setw(9) << " - " << " | " << setw(10) << this->commissionName << " | " << setw(12) << this->appointmentYear << " | " << setw(11) << this->certificateNumber << " | " << setw(13) << autobiographyStr << " | " << setw(9) << this->autobiographyCount << " | " << setw(10) << " - " << " | " << setw(10) << " - " << " |" << endl;
 }

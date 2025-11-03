@@ -1,8 +1,4 @@
 #pragma once
-#include <cstddef>
-#include <algorithm>
-
-using namespace std;
 
 template<typename T>
 struct DequeNode {
@@ -16,19 +12,16 @@ class Deque {
 private:
     DequeNode<T>* top;
     DequeNode<T>* bottom;
-    int currentSize;
 
 public:
     Deque() {
         this->top = nullptr;
         this->bottom = nullptr;
-        this->currentSize = 0;
     }
     
     Deque(const Deque& other) {
         this->top = nullptr;
         this->bottom = nullptr;
-        this->currentSize = 0;
         DequeNode<T>* current = other.top;
         while (current != nullptr) {
             this->pushBack(current->value);
@@ -64,7 +57,6 @@ public:
             this->top->prev = newNode;
             this->top = newNode;
         }
-        this->currentSize++;
     }
     
     void pushBack(const T& value) {
@@ -77,7 +69,6 @@ public:
             this->bottom->next = newNode;
             this->bottom = newNode;
         }
-        this->currentSize++;
     }
     
     void popFront() {
@@ -95,7 +86,6 @@ public:
         }
         
         delete temp;
-        this->currentSize--;
     }
     
     void popBack() {
@@ -113,7 +103,6 @@ public:
         }
         
         delete temp;
-        this->currentSize--;
     }
     
     T& peekFirst() {
@@ -133,18 +122,24 @@ public:
     }
     
     bool isEmpty() const {
-        return this->currentSize == 0;
+        return this->top == nullptr;
     }
     
     int size() const {
-        return this->currentSize;
+        int count = 0;
+        DequeNode<T>* current = this->top;
+        while (current != nullptr) {
+            count++;
+            current = current->next;
+        }
+        return count;
     }
     
-    void clearDeque() {
-        while (!this->isEmpty()) {
-            this->popFront();
-        }
-    }
+    // void clearDeque() {
+    //     while (!this->isEmpty()) {
+    //         this->popFront();
+    //     }
+    // }
     
     DequeNode<T>* find(const T& value) const {
         DequeNode<T>* current = this->top;
@@ -160,14 +155,14 @@ public:
     void sort() {
         if (this->isEmpty() || this->top->next == nullptr) return;
         
-        short swapped;
+        bool swapped;
         do {
-            swapped = 0;
+            swapped = false;
             DequeNode<T>* current = this->top;
             while (current->next != nullptr) {
-                if (current->next->value < current->value) {
+                if (current->value->getBirthYear() > current->next->value->getBirthYear()) {
                     swap(current->value, current->next->value);
-                    swapped = 1;
+                    swapped = true;
                 }
                 current = current->next;
             }

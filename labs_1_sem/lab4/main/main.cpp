@@ -9,6 +9,7 @@
 #include "../templates/include/Deque.hpp"
 using namespace std;
 
+
 void drawMenu(const string& title, const string options[], int numOptions) {
     int max_len = title.length();
     for (int i = 0; i < numOptions; i++) {
@@ -44,7 +45,7 @@ void addObject(Deque<Human*>& deque) {
     drawMenu("Select Type", typeOptions, 3);
     int typeChoice = getChoice(3);
     
-    Human* object = nullptr;
+    Human* object;
     if (typeChoice == 1) {
         UniversityTeacher* teacher = new UniversityTeacher();
         cin >> *teacher;
@@ -282,6 +283,32 @@ void peekObject(Deque<Human*>& deque) {
     }
 }
 
+void printDeque(Deque<Human*>& deque) {
+    if (deque.isEmpty()) {
+        cout << "Deque is empty." << endl;
+        return;
+    }
+
+    if (!deque.isEmpty()) {
+        TeacherCommissionMember tcm;
+        tcm.printHeader();
+        
+        Deque<Human*> temp;
+        while (!deque.isEmpty()) {
+            Human* human = deque.peekFirst();
+            deque.popFront();
+            human->printTable();
+            temp.pushBack(human);
+        }
+
+        while (!temp.isEmpty()) {
+            Human* human = temp.peekLast();
+            temp.popBack();
+            deque.pushFront(human);
+        }
+    }
+}
+
 void searchInDeque(Deque<Human*>& deque) {
     if (deque.isEmpty()) {
         cout << "Deque is empty." << endl;
@@ -340,48 +367,7 @@ void searchInDeque(Deque<Human*>& deque) {
         cout << "No matches found." << endl;
     } else {
         cout << "Search results (" << searchResults.size() << " found):" << endl;
-        if (!searchResults.isEmpty()) {
-            TeacherCommissionMember tcm;
-            tcm.printHeader();
-            Deque<Human*> tempPrint;
-            while (!searchResults.isEmpty()) {
-                Human* human = searchResults.peekFirst();
-                searchResults.popFront();
-                human->printTable();
-                tempPrint.pushBack(human);
-            }
-            while (!tempPrint.isEmpty()) {
-                Human* human = tempPrint.peekFirst();
-                tempPrint.popFront();
-                searchResults.pushBack(human);
-            }
-        }
-    }
-}
-
-void printDeque(Deque<Human*>& deque) {
-    if (deque.isEmpty()) {
-        cout << "Deque is empty." << endl;
-        return;
-    }
-
-    if (!deque.isEmpty()) {
-        TeacherCommissionMember tcm;
-        tcm.printHeader();
-        
-        Deque<Human*> temp;
-        while (!deque.isEmpty()) {
-            Human* human = deque.peekFirst();
-            deque.popFront();
-            human->printTable();
-            temp.pushBack(human);
-        }
-
-        while (!temp.isEmpty()) {
-            Human* human = temp.peekLast();
-            temp.popBack();
-            deque.pushFront(human);
-        }
+        printDeque(searchResults);
     }
 }
 
@@ -430,6 +416,12 @@ void run(){
 }
 
 int main() {
-    run();
+    char restart;
+    do{
+        run();
+        cout << "Do u wana repeate this task(y/n) y - yes, n - no" << endl;
+        cin >> restart;
+    }while(restart != 'n');
+    cout << "Exiting ...";
     return 0;
 }
