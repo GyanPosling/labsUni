@@ -17,9 +17,9 @@ TeacherCommissionMember& TeacherCommissionMember::operator=(const TeacherCommiss
         Human::operator=(other);
         UniversityTeacher::operator=(other);
         CommissionMember::operator=(other);
-        commissionWorksCount = other.commissionWorksCount;
-        for (int i = 0; i < commissionWorksCount; i++) {
-            commissionWorks[i] = other.commissionWorks[i];
+        this->commissionWorksCount = other.commissionWorksCount;
+        for (int i = 0; i < this->commissionWorksCount; i++) {
+            this->commissionWorks[i] = other.commissionWorks[i];
         }
     }
     return *this;
@@ -28,7 +28,7 @@ TeacherCommissionMember& TeacherCommissionMember::operator=(const TeacherCommiss
 bool TeacherCommissionMember::operator==(const TeacherCommissionMember& other) const {
     return UniversityTeacher::operator==(other) &&
            CommissionMember::operator==(other) &&
-           commissionWorksCount == other.commissionWorksCount;
+           this->commissionWorksCount == other.commissionWorksCount;
 }
 
 bool TeacherCommissionMember::operator<(const TeacherCommissionMember& other) const {
@@ -93,27 +93,27 @@ istream& operator>>(istream& is, TeacherCommissionMember& tcm) {
 }
 
 string TeacherCommissionMember::getCommissionWork(int index) const { 
-    if (index >= 0 && index < commissionWorksCount) return commissionWorks[index];
+    if (index >= 0 && index < this->commissionWorksCount) return this->commissionWorks[index];
     return "";
 }
 
-int TeacherCommissionMember::getCommissionWorksCount() const { return commissionWorksCount; }
+int TeacherCommissionMember::getCommissionWorksCount() const { return this->commissionWorksCount; }
 
 int TeacherCommissionMember::getCommissionWorksSize() const { return COMMISSION_WORKS_SIZE; }
 
 void TeacherCommissionMember::setCommissionWork(int index, const string& work) { 
     if (index >= 0 && index < COMMISSION_WORKS_SIZE) {
-        commissionWorks[index] = work;
-        if (index >= commissionWorksCount) {
-            commissionWorksCount = index + 1;
+        this->commissionWorks[index] = work;
+        if (index >= this->commissionWorksCount) {
+            this->commissionWorksCount = index + 1;
         }
     }
 }
 
 void TeacherCommissionMember::addCommissionWork(const string& work) {
-    if (commissionWorksCount < COMMISSION_WORKS_SIZE) {
-        commissionWorks[commissionWorksCount] = work;
-        commissionWorksCount++;
+    if (this->commissionWorksCount < COMMISSION_WORKS_SIZE) {
+        this->commissionWorks[this->commissionWorksCount] = work;
+        this->commissionWorksCount++;
     }
 }
 

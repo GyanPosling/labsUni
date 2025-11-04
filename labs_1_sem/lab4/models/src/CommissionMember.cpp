@@ -11,12 +11,12 @@ CommissionMember::~CommissionMember() {}
 CommissionMember& CommissionMember::operator=(const CommissionMember& other) {
     if (this != &other) {
         Human::operator=(other);
-        commissionName = other.commissionName;
-        appointmentYear = other.appointmentYear;
-        certificateNumber = other.certificateNumber;
-        autobiographyCount = other.autobiographyCount;
+        this->commissionName = other.commissionName;
+        this->appointmentYear = other.appointmentYear;
+        this->certificateNumber = other.certificateNumber;
+        this->autobiographyCount = other.autobiographyCount;
         for (int i = 0; i < autobiographyCount; i++) {
-            autobiography[i] = other.autobiography[i];
+            this->autobiography[i] = other.autobiography[i];
         }
     }
     return *this;
@@ -24,10 +24,10 @@ CommissionMember& CommissionMember::operator=(const CommissionMember& other) {
 
 bool CommissionMember::operator==(const CommissionMember& other) const {
     return Human::operator==(other) &&
-           commissionName == other.commissionName &&
-           appointmentYear == other.appointmentYear &&
-           certificateNumber == other.certificateNumber &&
-           autobiographyCount == other.autobiographyCount;
+           this->commissionName == other.commissionName &&
+           this->appointmentYear == other.appointmentYear &&
+           this->certificateNumber == other.certificateNumber &&
+           this->autobiographyCount == other.autobiographyCount;
 }
 
 bool CommissionMember::operator<(const CommissionMember& other) const {
@@ -65,31 +65,31 @@ istream& operator>>(istream& is, CommissionMember& member) {
     return is;
 }
 
-string CommissionMember::getCommissionName() const { return commissionName; }
-int CommissionMember::getAppointmentYear() const { return appointmentYear; }
-string CommissionMember::getCertificateNumber() const { return certificateNumber; }
+string CommissionMember::getCommissionName() const { return this->commissionName; }
+int CommissionMember::getAppointmentYear() const { return this->appointmentYear; }
+string CommissionMember::getCertificateNumber() const { return this->certificateNumber; }
 string CommissionMember::getAutobiography(int index) const { 
-    if (index >= 0 && index < autobiographyCount) return autobiography[index];
+    if (index >= 0 && index < autobiographyCount) return this->autobiography[index];
     return "";
 }
-int CommissionMember::getAutobiographyCount() const { return autobiographyCount; }
+int CommissionMember::getAutobiographyCount() const { return this->autobiographyCount; }
 int CommissionMember::getAutobiographySize() const { return AUTOBIOGRAPHY_SIZE; }
 
-void CommissionMember::setCommissionName(const string& name) { commissionName = name; }
-void CommissionMember::setAppointmentYear(int year) { appointmentYear = year; }
-void CommissionMember::setCertificateNumber(const string& number) { certificateNumber = number; }
+void CommissionMember::setCommissionName(const string& name) { this->commissionName = name; }
+void CommissionMember::setAppointmentYear(int year) { this->appointmentYear = year; }
+void CommissionMember::setCertificateNumber(const string& number) { this->certificateNumber = number; }
 void CommissionMember::setAutobiography(int index, const string& bio) { 
     if (index >= 0 && index < AUTOBIOGRAPHY_SIZE) {
-        autobiography[index] = bio;
-        if (index >= autobiographyCount) {
-            autobiographyCount = index + 1;
+        this->autobiography[index] = bio;
+        if (index >= this->autobiographyCount) {
+            this->autobiographyCount = index + 1;
         }
     }
 }
 void CommissionMember::addAutobiography(const string& bio) {
-    if (autobiographyCount < AUTOBIOGRAPHY_SIZE) {
-        autobiography[autobiographyCount] = bio;
-        autobiographyCount++;
+    if (this->autobiographyCount < AUTOBIOGRAPHY_SIZE) {
+        this->autobiography[autobiographyCount] = bio;
+        this->autobiographyCount++;
     }
 }
 

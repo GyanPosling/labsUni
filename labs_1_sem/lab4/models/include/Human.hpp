@@ -4,12 +4,16 @@
 #include <iomanip>
 using namespace std;
 
+enum SearchMode { FULL_MATCH, LAST_NAME, FIRST_NAME, MIDDLE_NAME, BIRTH_YEAR };
+
 class Human {
 protected:
     string firstName;
     string lastName;
     string middleName;
     int birthYear;
+private:
+    static SearchMode currentSearchMode;
 public:
     Human();
     Human(const string& first, const string& last, const string& middle, int year);
@@ -30,7 +34,8 @@ public:
     void setLastName(const string& last);
     void setMiddleName(const string& middle);
     void setBirthYear(int year);
-    
+    static void setSearchMode(SearchMode mode);
+
     virtual void printHeader() const = 0;
     virtual void printTable() const = 0;
 };

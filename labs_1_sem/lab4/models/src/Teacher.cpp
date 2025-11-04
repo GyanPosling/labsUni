@@ -11,12 +11,12 @@ UniversityTeacher::~UniversityTeacher() {}
 UniversityTeacher& UniversityTeacher::operator=(const UniversityTeacher& other) {
     if (this != &other) {
         Human::operator=(other);
-        position = other.position;
-        academicDegree = other.academicDegree;
-        specialty = other.specialty;
-        scientificWorksCount = other.scientificWorksCount;
+        this->position = other.position;
+        this->academicDegree = other.academicDegree;
+        this->specialty = other.specialty;
+        this->scientificWorksCount = other.scientificWorksCount;
         for (int i = 0; i < scientificWorksCount; i++) {
-            scientificWorks[i] = other.scientificWorks[i];
+            this->scientificWorks[i] = other.scientificWorks[i];
         }
     }
     return *this;
@@ -24,10 +24,10 @@ UniversityTeacher& UniversityTeacher::operator=(const UniversityTeacher& other) 
 
 bool UniversityTeacher::operator==(const UniversityTeacher& other) const {
     return Human::operator==(other) &&
-           position == other.position &&
-           academicDegree == other.academicDegree &&
-           specialty == other.specialty &&
-           scientificWorksCount == other.scientificWorksCount;
+           this->position == other.position &&
+           this->academicDegree == other.academicDegree &&
+           this->specialty == other.specialty &&
+           this->scientificWorksCount == other.scientificWorksCount;
 }
 
 bool UniversityTeacher::operator<(const UniversityTeacher& other) const {
@@ -65,31 +65,31 @@ istream& operator>>(istream& is, UniversityTeacher& teacher) {
     return is;
 }
 
-string UniversityTeacher::getPosition() const { return position; }
-string UniversityTeacher::getAcademicDegree() const { return academicDegree; }
-string UniversityTeacher::getSpecialty() const { return specialty; }
+string UniversityTeacher::getPosition() const { return this->position; }
+string UniversityTeacher::getAcademicDegree() const { return this->academicDegree; }
+string UniversityTeacher::getSpecialty() const { return this->specialty; }
 string UniversityTeacher::getScientificWork(int index) const { 
-    if (index >= 0 && index < scientificWorksCount) return scientificWorks[index];
+    if (index >= 0 && index < scientificWorksCount) return this->scientificWorks[index];
     return "";
 }
-int UniversityTeacher::getScientificWorksCount() const { return scientificWorksCount; }
+int UniversityTeacher::getScientificWorksCount() const { return this->scientificWorksCount; }
 int UniversityTeacher::getScientificWorksSize() const { return SCIENTIFIC_WORKS_SIZE; }
 
-void UniversityTeacher::setPosition(const string& pos) { position = pos; }
-void UniversityTeacher::setAcademicDegree(const string& degree) { academicDegree = degree; }
-void UniversityTeacher::setSpecialty(const string& spec) { specialty = spec; }
+void UniversityTeacher::setPosition(const string& pos) { this->position = pos; }
+void UniversityTeacher::setAcademicDegree(const string& degree) { this->academicDegree = degree; }
+void UniversityTeacher::setSpecialty(const string& spec) { this->specialty = spec; }
 void UniversityTeacher::setScientificWork(int index, const string& work) { 
     if (index >= 0 && index < SCIENTIFIC_WORKS_SIZE) {
-        scientificWorks[index] = work;
-        if (index >= scientificWorksCount) {
-            scientificWorksCount = index + 1;
+        this->scientificWorks[index] = work;
+        if (index >= this->scientificWorksCount) {
+            this->scientificWorksCount = index + 1;
         }
     }
 }
 void UniversityTeacher::addScientificWork(const string& work) {
-    if (scientificWorksCount < SCIENTIFIC_WORKS_SIZE) {
-        scientificWorks[scientificWorksCount] = work;
-        scientificWorksCount++;
+    if (this->scientificWorksCount < SCIENTIFIC_WORKS_SIZE) {
+        this->scientificWorks[scientificWorksCount] = work;
+        this->scientificWorksCount++;
     }
 }
 

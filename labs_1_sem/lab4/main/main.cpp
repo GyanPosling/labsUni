@@ -315,59 +315,67 @@ void searchInDeque(Deque<Human*>& deque) {
         return;
     }
 
-    string searchOptions[3] = {"1. Search by Last Name", "2. Search by Birth Year", "3. Search by Position"};
-    drawMenu("Search Options", searchOptions, 3);
-    int choice = getChoice(3);
+    string searchOptions[5] = {"1. Search by Last Name", "2. Search by First Name", "3. Search by Middle Name", "4. Search by Birth Year", "5. Search by Full Match (all fields)"};
+    drawMenu("Search Options", searchOptions, 5);
+    int choice = getChoice(5);
 
     string searchString;
-    int searchYear;
+    int searchYear = 0;
     
+    UniversityTeacher* searchObj = new UniversityTeacher("", "", "", 0, "", "", "");
+
     if (choice == 1) {
         cout << "Enter last name to search: ";
         cin >> searchString;
+        searchObj->setLastName(searchString);
+        Human::setSearchMode(LAST_NAME);
     } else if (choice == 2) {
+        cout << "Enter first name to search: ";
+        cin >> searchString;
+        searchObj->setFirstName(searchString);
+        Human::setSearchMode(FIRST_NAME); 
+    } else if (choice == 3) {
+        cout << "Enter middle name to search: ";
+        cin >> searchString;
+        searchObj->setMiddleName(searchString);
+        Human::setSearchMode(MIDDLE_NAME);
+    } else if (choice == 4) {
         cout << "Enter birth year to search: ";
         cin >> searchYear;
-    } else if (choice == 3) {
-        cout << "Enter position to search: ";
+        searchObj->setBirthYear(searchYear);
+        Human::setSearchMode(BIRTH_YEAR);
+    } else { 
+        cout << "Enter criteria for Full Match:" << endl;
+        
+        cout << "Enter last name: ";
         cin >> searchString;
+        searchObj->setLastName(searchString);
+        
+        cout << "Enter first name: ";
+        cin >> searchString;
+        searchObj->setFirstName(searchString);
+        
+        cout << "Enter middle name: ";
+        cin >> searchString;
+        searchObj->setMiddleName(searchString);
+        
+        cout << "Enter birth year: ";
+        cin >> searchYear;
+        searchObj->setBirthYear(searchYear);
+        
+        Human::setSearchMode(FULL_MATCH); 
     }
 
-    Deque<Human*> searchResults;
-    Deque<Human*> temp;
-
-    while (!deque.isEmpty()) {
-        Human* human = deque.peekFirst();
-        deque.popFront();
-        temp.pushBack(human);
-
-        bool match = false;
-        if (choice == 1) {
-            match = (human->getLastName() == searchString);
-        } else if (choice == 2) {
-            match = (human->getBirthYear() == searchYear);
-        } else if (choice == 3) {
-            if (UniversityTeacher* teacher = dynamic_cast<UniversityTeacher*>(human)) {
-                match = (teacher->getPosition() == searchString);
-            }
-        }
-
-        if (match) {
-            searchResults.pushBack(human);
-        }
-    }
-
-    while (!temp.isEmpty()) {
-        Human* human = temp.peekFirst();
-        temp.popFront();
-        deque.pushBack(human);
-    }
-
+    Deque<Human*> searchResults = deque.find(searchObj);
+    
+    Human::setSearchMode(FULL_MATCH); 
+    delete searchObj;
+    
     if (searchResults.isEmpty()) {
         cout << "No matches found." << endl;
     } else {
         cout << "Search results (" << searchResults.size() << " found):" << endl;
-        printDeque(searchResults);
+        printDeque(searchResults); 
     }
 }
 
@@ -379,9 +387,38 @@ void clearDeque(Deque<Human*>& deque) {
     cout << "Deque cleared." << endl;
 }
 
-void sortDeque(Deque<Human*>& deque) {
+void sortDequeByField(Deque<Human*>& deque) {
+    if (deque.isEmpty()) {
+        cout << "Deque is empty. Nothing to sort." << endl;
+        return;
+    }
+    string sortOptions[4] = {"1. Sort by Last Name", "2. Sort by First Name", "3. Sort by Middle Name", "4. Sort by Birth Year"};
+    drawMenu("Sort Options", sortOptions, 4);
+    int choice = getChoice(4); 
+
+    if (choice == 1) {
+        Human::setSearchMode(LAST_NAME);
+        cout << "Sorting by Last Name..." << endl;
+    } else if (choice == 2) {
+        Human::setSearchMode(FIRST_NAME);
+        cout << "Sorting by First Name..." << endl;
+    } else if (choice == 3) {
+        Human::setSearchMode(MIDDLE_NAME);
+        cout << "Sorting by Middle Name..." << endl;
+    } else if (choice == 4) {
+        Human::setSearchMode(BIRTH_YEAR);
+        cout << "Sorting by Birth Year..." << endl;
+    } else {
+        cout << "Invalid choice. Aborting sort." << endl;
+        return;
+    }
+
     deque.sort();
-    cout << "Deque sorted." << endl;
+    
+    Human::setSearchMode(LAST_NAME); 
+    
+    cout << "Deque sorted successfully." << endl;
+    printDeque(deque);
 }
 
 void run(){
@@ -409,7 +446,7 @@ void run(){
             case 4: peekObject(myDeque); break;
             case 5: printDeque(myDeque); break;
             case 6: searchInDeque(myDeque); break;
-            case 7: sortDeque(myDeque); break;
+            case 7: sortDequeByField(myDeque); break;
             case 8: clearDeque(myDeque); break;
         }
     } while (choice != 8);

@@ -135,21 +135,17 @@ public:
         return count;
     }
     
-    // void clearDeque() {
-    //     while (!this->isEmpty()) {
-    //         this->popFront();
-    //     }
-    // }
     
-    DequeNode<T>* find(const T& value) const {
+    Deque<T> find(const T& value) const {
+        Deque<T> searchResults;
         DequeNode<T>* current = this->top;
         while (current != nullptr) {
-            if (current->value == value) {
-                return current;
+            if (*(current->value) == *value) { 
+                searchResults.pushBack(current->value);
             }
             current = current->next;
         }
-        return nullptr;
+        return searchResults;
     }
     
     void sort() {
@@ -160,7 +156,7 @@ public:
             swapped = false;
             DequeNode<T>* current = this->top;
             while (current->next != nullptr) {
-                if (current->value->getBirthYear() > current->next->value->getBirthYear()) {
+                if (*(current->next->value) < *(current->value)) {
                     swap(current->value, current->next->value);
                     swapped = true;
                 }
