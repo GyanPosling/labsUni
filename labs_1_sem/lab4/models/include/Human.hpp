@@ -4,7 +4,13 @@
 #include <iomanip>
 using namespace std;
 
-enum SearchMode { FULL_MATCH, LAST_NAME, FIRST_NAME, MIDDLE_NAME, BIRTH_YEAR };
+enum SearchMode {
+    FULL_MATCH, 
+    LAST_NAME, 
+    FIRST_NAME, 
+    MIDDLE_NAME, 
+    BIRTH_YEAR
+};
 
 class Human {
 protected:
