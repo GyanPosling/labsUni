@@ -108,16 +108,8 @@ public:
     T& peekFirst() {
         return this->top->value;
     }
-    
-    const T& peekFirst() const {
-        return this->top->value;
-    }
-    
+        
     T& peekLast() {
-        return this->bottom->value;
-    }
-    
-    const T& peekLast() const {
         return this->bottom->value;
     }
     
