@@ -1,0 +1,144 @@
+#include "../include/Teacher.hpp"
+#include "../../exceptions/include/InputHandler.hpp"
+
+UniversityTeacher::UniversityTeacher() : Human(), scientificWorksCount(0) {}
+
+UniversityTeacher::UniversityTeacher(const string& first, const string& last, const string& middle, const Date& birth,
+                                     const string& pos, const string& degree, const string& spec)
+    : Human(first, last, middle, birth), position(pos), academicDegree(degree), specialty(spec), scientificWorksCount(0) {}
+
+UniversityTeacher::~UniversityTeacher() {}
+
+UniversityTeacher& UniversityTeacher::operator=(const UniversityTeacher& other) {
+    if (this != &other) {
+        Human::operator=(other);
+        this->position = other.position;
+        this->academicDegree = other.academicDegree;
+        this->specialty = other.specialty;
+        this->scientificWorksCount = other.scientificWorksCount;
+        for (int i = 0; i < scientificWorksCount; i++) {
+            this->scientificWorks[i] = other.scientificWorks[i];
+        }
+    }
+    return *this;
+}
+
+bool UniversityTeacher::operator==(const UniversityTeacher& other) const {
+    return Human::operator==(other) &&
+           this->position == other.position &&
+           this->academicDegree == other.academicDegree &&
+           this->specialty == other.specialty &&
+           this->scientificWorksCount == other.scientificWorksCount;
+}
+
+bool UniversityTeacher::operator<(const UniversityTeacher& other) const {
+    return Human::operator<(other);
+}
+
+ostream& operator<<(ostream& os, const UniversityTeacher& teacher) {
+    os << static_cast<const Human&>(teacher) << " " << teacher.position << " " << teacher.academicDegree << " " << teacher.specialty;
+    for (int i = 0; i < teacher.scientificWorksCount; i++) {
+        os << " " << teacher.scientificWorks[i];
+    }
+    return os;
+}
+
+istream& operator>>(istream& is, UniversityTeacher& teacher) {
+    is >> static_cast<Human&>(teacher);
+    
+    bool success = false;
+    while (!success) {
+        try {
+            safeInputText(is, teacher.position, "Enter position: ");
+            success = true;
+        } catch (const InputException& e) {
+            cout << "Error: " << e.what() << endl;
+        }
+    }
+    
+    success = false;
+    while (!success) {
+        try {
+            safeInputText(is, teacher.academicDegree, "Enter academic degree: ");
+            success = true;
+        } catch (const InputException& e) {
+            cout << "Error: " << e.what() << endl;
+        }
+    }
+    
+    success = false;
+    while (!success) {
+        try {
+            safeInputText(is, teacher.specialty, "Enter specialty: ");
+            success = true;
+        } catch (const InputException& e) {
+            cout << "Error: " << e.what() << endl;
+        }
+    }
+    
+    success = false;
+    while (!success) {
+        try {
+            safeInputInt(is, teacher.scientificWorksCount, 0, SCIENTIFIC_WORKS_SIZE, "Enter number of scientific works (0-" + to_string(SCIENTIFIC_WORKS_SIZE) + "): ");
+            success = true;
+        } catch (const InputException& e) {
+            cout << "Error: " << e.what() << endl;
+        }
+    }
+    
+    for (int i = 0; i < teacher.scientificWorksCount; i++) {
+        success = false;
+        while (!success) {
+            try {
+                safeInputText(is, teacher.scientificWorks[i], "Enter scientific work " + to_string(i + 1) + ": ");
+                success = true;
+            } catch (const InputException& e) {
+                cout << "Error: " << e.what() << endl;
+            }
+        }
+    }
+    
+    return is;
+}
+
+string UniversityTeacher::getPosition() const { return this->position; }
+string UniversityTeacher::getAcademicDegree() const { return this->academicDegree; }
+string UniversityTeacher::getSpecialty() const { return this->specialty; }
+string UniversityTeacher::getScientificWork(int index) const { 
+    if (index >= 0 && index < scientificWorksCount) return this->scientificWorks[index];
+    return "";
+}
+int UniversityTeacher::getScientificWorksCount() const { return this->scientificWorksCount; }
+int UniversityTeacher::getScientificWorksSize() const { return SCIENTIFIC_WORKS_SIZE; }
+
+void UniversityTeacher::setPosition(const string& pos) { this->position = pos; }
+void UniversityTeacher::setAcademicDegree(const string& degree) { this->academicDegree = degree; }
+void UniversityTeacher::setSpecialty(const string& spec) { this->specialty = spec; }
+void UniversityTeacher::setScientificWork(int index, const string& work) { 
+    if (index >= 0 && index < SCIENTIFIC_WORKS_SIZE) {
+        this->scientificWorks[index] = work;
+        if (index >= this->scientificWorksCount) {
+            this->scientificWorksCount = index + 1;
+        }
+    }
+}
+void UniversityTeacher::addScientificWork(const string& work) {
+    if (this->scientificWorksCount < SCIENTIFIC_WORKS_SIZE) {
+        this->scientificWorks[scientificWorksCount] = work;
+        this->scientificWorksCount++;
+    }
+}
+
+void UniversityTeacher::printHeader() const {
+    cout << left;
+    cout << "| " << setw(9) << "Last Name" << " | " << setw(10) << "First Name" << " | " << setw(11) << "Middle Name" << " | " << setw(10) << "Birth Year" << " | " << setw(8) << "Position" << " | " << setw(6) << "Degree" << " | " << setw(9) << "Specialty" << " | " << setw(16) << "Scientific Works" << " | " << setw(9) << "Sci Count" << " | " << setw(10) << "Commission" << " | " << setw(12) << "Appoint Year" << " | " << setw(11) << "Certificate" << " | " << setw(13) << "Autobiography" << " | " << setw(9) << "Bio Count" << " | " << setw(10) << "Comm Works" << " | " << setw(10) << "Comm Count" << " |" << endl;}
+
+void UniversityTeacher::printTable() const {
+    string scientificWorksStr;
+    for (int i = 0; i < this->scientificWorksCount; i++) {
+        if (i > 0) scientificWorksStr += ", ";
+        scientificWorksStr += this->scientificWorks[i];
+    }
+    cout << left;
+    cout << "| " << setw(9) << this->lastName << " | " << setw(10) << this->firstName << " | " << setw(11) << this->middleName << " | " << setw(10) << this->birthday << " | " << setw(8) << this->position << " | " << setw(6) << this->academicDegree << " | " << setw(9) << this->specialty << " | " << setw(16) << scientificWorksStr << " | " << setw(9) << this->scientificWorksCount << " | " << setw(10) << " - " << " | " << setw(12) << " - " << " | " << setw(11) << " - " << " | " << setw(13) << " - " << " | " << setw(9) << " - " << " | " << setw(10) << " - " << " | " << setw(10) << " - " << " |" << endl;
+}

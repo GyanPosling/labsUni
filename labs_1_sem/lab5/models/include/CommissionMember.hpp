@@ -1,5 +1,6 @@
 #pragma once
 #include "Human.hpp"
+#include "../../exceptions/include/Date.hpp"
 using namespace std;
 
 #define AUTOBIOGRAPHY_SIZE 10
@@ -7,14 +8,14 @@ using namespace std;
 class CommissionMember : virtual public Human {
 protected:
     string commissionName;
-    int appointmentYear;
+    Date appointmentDate;
     string certificateNumber;
     string autobiography[AUTOBIOGRAPHY_SIZE];
     int autobiographyCount;
 public:
     CommissionMember();
-    CommissionMember(const string& first, const string& last, const string& middle, int year,
-                    const string& commission, int appYear, const string& cert);
+    CommissionMember(const string& first, const string& last, const string& middle, const Date& birth,
+                    const string& commission, const Date& appDate, const string& cert);
     ~CommissionMember();
     
     CommissionMember& operator=(const CommissionMember& other);
@@ -24,14 +25,14 @@ public:
     friend istream& operator>>(istream& is, CommissionMember& member);
     
     string getCommissionName() const;
-    int getAppointmentYear() const;
+    Date getAppointmentDate() const;
     string getCertificateNumber() const;
     string getAutobiography(int index) const;
     int getAutobiographyCount() const;
     int getAutobiographySize() const;
     
     void setCommissionName(const string& name);
-    void setAppointmentYear(int year);
+    void setAppointmentDate(const Date& date);
     void setCertificateNumber(const string& number);
     void setAutobiography(int index, const string& bio);
     void addAutobiography(const string& bio);

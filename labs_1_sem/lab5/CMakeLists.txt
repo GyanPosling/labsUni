@@ -11,6 +11,12 @@ set(SOURCES
     models/src/CommissionMember.cpp
     models/src/TeacherCommissionMember.cpp
     templates/src/Deque.tpp
+    exceptions/src/Exception.cpp
+    exceptions/src/InputException.cpp
+    exceptions/src/FileException.cpp
+    exceptions/src/ContainerException.cpp
+    exceptions/src/Date.cpp
+    exceptions/src/InputHandler.cpp
     main/main.cpp
 )
 
@@ -20,6 +26,12 @@ set(HEADERS
     models/include/CommissionMember.hpp
     models/include/TeacherCommissionMember.hpp
     templates/include/Deque.hpp
+    exceptions/include/Exception.hpp
+    exceptions/include/InputException.hpp
+    exceptions/include/FileException.hpp
+    exceptions/include/ContainerException.hpp
+    exceptions/include/Date.hpp
+    exceptions/include/InputHandler.hpp
 )
 
 add_executable(lab4 ${SOURCES} ${HEADERS})
