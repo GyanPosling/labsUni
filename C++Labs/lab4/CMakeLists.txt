@@ -10,7 +10,7 @@ set(SOURCES
     models/src/Teacher.cpp
     models/src/CommissionMember.cpp
     models/src/TeacherCommissionMember.cpp
-    templates/src/Deque.tpp
+    templates/include/Deque.tpp
     main/main.cpp
 )
 
