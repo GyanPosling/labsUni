@@ -1,6 +1,6 @@
 # Лабараторная работа нормер 4 "Шаблоны (Deque)"
 ## Условие:
-- Все изменения добавлять к [lab3](https://github.com/GyanPosling/labs_second_course/tree/main/С++Labs/lab3)
+- Все изменения добавлять к [lab3](https://github.com/GyanPosling/labsUni/tree/main/C%2B%2BLabs/lab3)
 - Реализовать Deque куда можно будет добвлять любой класс в рамках наследования
 - Так же добавить сортировку элементов и поиск элементов для Deque(Предоставить пользователю выбор по какому полю сортировать и производить поиск)
-- Исправить вывод всех пользователей относительно [lab3](https://github.com/GyanPosling/labs_second_course/tree/main/С++Labs/lab3)
+- Исправить вывод всех пользователей относительно [lab3](https://github.com/GyanPosling/labsUni/tree/main/C%2B%2BLabs/lab3)
