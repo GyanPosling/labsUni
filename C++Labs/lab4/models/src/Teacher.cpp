@@ -93,6 +93,48 @@ void UniversityTeacher::addScientificWork(const string& work) {
     }
 }
 
+void UniversityTeacher::updatePerson (int fieldChoice){
+    string str;
+    int num;
+    if(fieldChoice <= 4) {
+        Human::updatePerson(fieldChoice);
+        return;
+    }
+    
+    switch(fieldChoice) {
+        case 5:
+            cout << "New position: ";
+            cin >> str;
+            setPosition(str);
+            break;
+        case 6:
+            cout << "New degree: ";
+            cin >> str;
+            setAcademicDegree(str);
+            break;
+        case 7:
+            cout << "New specialty: ";
+            cin >> str;
+            setSpecialty(str);
+            break;
+        case 8:
+            cout << "New scientific work: ";
+            cin >> str;
+            addScientificWork(str);
+            break;
+        case 9:
+            cout << "Enter number of scientific works (0-5): ";
+            cin >> num;
+            if(num > 5) num = 5;
+            for(int i = 0; i < num; i++) {
+                cout << "Scientific work " << i+1 << ": ";
+                cin >> str;
+                setScientificWork(i, str);
+            }
+            break;
+    }
+}
+
 void UniversityTeacher::printHeader() const {
     cout << left;
     cout << "| " << setw(9) << "Last Name" << " | " << setw(10) << "First Name" << " | " << setw(11) << "Middle Name" << " | " << setw(10) << "Birth Year" << " | " << setw(8) << "Position" << " | " << setw(6) << "Degree" << " | " << setw(9) << "Specialty" << " | " << setw(16) << "Scientific Works" << " | " << setw(9) << "Sci Count" << " | " << setw(10) << "Commission" << " | " << setw(12) << "Appoint Year" << " | " << setw(11) << "Certificate" << " | " << setw(13) << "Autobiography" << " | " << setw(9) << "Bio Count" << " | " << setw(10) << "Comm Works" << " | " << setw(10) << "Comm Count" << " |" << endl;}

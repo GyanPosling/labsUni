@@ -38,4 +38,6 @@ public:
     
     void printHeader() const override;
     void printTable() const override;
+
+    void updatePerson(int fieldChoice) override;
 };

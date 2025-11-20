@@ -76,4 +76,32 @@ void Human::setLastName(const string& last) { this->lastName = last; }
 void Human::setMiddleName(const string& middle) { this->middleName = middle; }
 void Human::setBirthYear(int year) { this->birthYear = year; }
 void Human::setSearchMode(SearchMode mode) { currentSearchMode = mode; }
+
+void  Human::updatePerson(int fieldChoice) {
+    string str;
+    int num;
+    switch(fieldChoice) {
+        case 1:
+            cout << "New first name: ";
+            cin >> str;
+            setFirstName(str);
+            break;
+        case 2:
+            cout << "New last name: ";
+            cin >> str;
+            setLastName(str);
+            break;
+        case 3:
+            cout << "New middle name: ";
+            cin >> str;
+            setMiddleName(str);
+            break;
+        case 4:
+            cout << "New birth year: ";
+            cin >> num;
+            setBirthYear(num);
+            break;
+    }
+}
+
 SearchMode Human::currentSearchMode = FULL_MATCH;

@@ -88,180 +88,71 @@ void removeObject(Deque<Human*>& deque) {
     }
 }
 
-void updateHumanFields(Human* human) {
-    string str;
-    int num;
-    string options[4] = {"1. First Name", "2. Last Name", "3. Middle Name", "4. Birth Year"};
-    drawMenu("Select Human Field", options, 4);
-    int choice = getChoice(4);
-    if (choice == 1) {
-        cout << "New first name: ";
-        cin >> str;
-        human->setFirstName(str);
-    } else if (choice == 2) {
-        cout << "New last name: ";
-        cin >> str;
-        human->setLastName(str);
-    } else if (choice == 3) {
-        cout << "New middle name: ";
-        cin >> str;
-        human->setMiddleName(str);
-    } else {
-        cout << "New birth year: ";
-        cin >> num;
-        human->setBirthYear(num);
-    }
-}
-
-void updateTeacherFields(UniversityTeacher* teacher) {
-    string str;
-    int num;
-    string options[5] = {"1. Position", "2. Degree", "3. Specialty", "4. Add Scientific Work", "5. Replace All Scientific Works"};
-    drawMenu("Select Teacher Field", options, 5);
-    int choice = getChoice(5);
-    if (choice == 1) {
-        cout << "New position: ";
-        cin >> str;
-        teacher->setPosition(str);
-    } else if (choice == 2) {
-        cout << "New degree: ";
-        cin >> str;
-        teacher->setAcademicDegree(str);
-    } else if (choice == 3) {
-        cout << "New specialty: ";
-        cin >> str;
-        teacher->setSpecialty(str);
-    } else if (choice == 4) {
-        cout << "New scientific work: ";
-        cin >> str;
-        teacher->addScientificWork(str);
-    } else {
-        cout << "Enter number of scientific works (0-5): ";
-        cin >> num;
-        if (num > 5) num = 5;
-        for (int i = 0; i < num; i++) {
-            cout << "Scientific work " << i+1 << ": ";
-            cin >> str;
-            teacher->setScientificWork(i, str);
-        }
-    }
-}
-
-void updateCommissionFields(CommissionMember* commissionMember) {
-    string str;
-    int num;
-    string options[5] = {"1. Commission Name", "2. Appointment Year", "3. Certificate Number", "4. Add Autobiography", "5. Replace All Autobiography"};
-    drawMenu("Select Commission Field", options, 5);
-    int choice = getChoice(5);
-    if (choice == 1) {
-        cout << "New commission name: ";
-        cin >> str;
-        commissionMember->setCommissionName(str);
-    } else if (choice == 2) {
-        cout << "New appointment year: ";
-        cin >> num;
-        commissionMember->setAppointmentYear(num);
-    } else if (choice == 3) {
-        cout << "New certificate number: ";
-        cin >> str;
-        commissionMember->setCertificateNumber(str);
-    } else if (choice == 4) {
-        cout << "New autobiography: ";
-        cin >> str;
-        commissionMember->addAutobiography(str);
-    } else {
-        cout << "Enter number of autobiography (0-10): ";
-        cin >> num;
-        if (num > 10) num = 10;
-        for (int i = 0; i < num; i++) {
-            cout << "Autobiography " << i+1 << ": ";
-            cin >> str;
-            commissionMember->setAutobiography(i, str);
-        }
-    }
-}
-
-void updateTeacherCommissionMemberFields(TeacherCommissionMember* teacherCommissionMember) {
-    string str;
-    int num;
-    string options[2] = {"1. Add Commission Work", "2. Replace All Commission Works"};
-    drawMenu("Select TCM Extra Field", options, 2);
-    int choice = getChoice(2);
-    if (choice == 1) {
-        cout << "New commission work: ";
-        cin >> str;
-        teacherCommissionMember->addCommissionWork(str);
-    } else {
-        cout << "Enter number of commission works (0-5): ";
-        cin >> num;
-        if (num > 5) num = 5;
-        for (int i = 0; i < num; i++) {
-            cout << "Commission work " << i+1 << ": ";
-            cin >> str;
-            teacherCommissionMember->setCommissionWork(i, str);
-        }
-    }
-}
-
 void modifyObject(Deque<Human*>& deque) {
     string sideOptions[2] = {"1. Modify First", "2. Modify Last"};
     drawMenu("Select Object to Modify", sideOptions, 2);
     int sideChoice = getChoice(2);
     
-    if (deque.isEmpty()) {
+    if(deque.isEmpty()) {
         cout << "Deque is empty." << endl;
         return;
     }
     
     Human* human = (sideChoice == 1) ? deque.peekFirst() : deque.peekLast();
     
-    TeacherCommissionMember* teacherCommissionMember = dynamic_cast<TeacherCommissionMember*>(human);
-    UniversityTeacher* teacher = dynamic_cast<UniversityTeacher*>(human);
-    CommissionMember* commissionMember = dynamic_cast<CommissionMember*>(human);
-    
     string modifyOptions[2] = {"1. Change All Data", "2. Change Specific Field"};
     drawMenu("Modify Options", modifyOptions, 2);
     int modifyChoice = getChoice(2);
     
-    if (modifyChoice == 1) {
-        if (teacherCommissionMember) {
-            cin >> *teacherCommissionMember;
-        } else if (teacher) {
-            cin >> *teacher;
-        } else if (commissionMember) {
-            cin >> *commissionMember;
-        } else {
-            cin >> *human;
-        }
+    if(modifyChoice == 1) {
+        TeacherCommissionMember* tcm = dynamic_cast<TeacherCommissionMember*>(human);
+        UniversityTeacher* teacher = dynamic_cast<UniversityTeacher*>(human);
+        CommissionMember* cm = dynamic_cast<CommissionMember*>(human);
+        
+        if(tcm) cin >> *tcm;
+        else if(teacher) cin >> *teacher;
+        else if(cm) cin >> *cm;
+        else cin >> *human;
         return;
     }
     
-    int numFieldOptions = 1;
-    string fieldOptions[7];
-    fieldOptions[0] = "1. Human Fields";
+    int fieldChoice;
+    TeacherCommissionMember* tcm = dynamic_cast<TeacherCommissionMember*>(human);
     
-    if (teacher) {
-        fieldOptions[numFieldOptions++] = "2. Teacher Fields";
-    }
-    if (commissionMember) {
-        fieldOptions[numFieldOptions++] = "3. Commission Fields";
-    }
-    if (teacherCommissionMember) {
-        fieldOptions[numFieldOptions++] = "4. TCM Extra Fields";
+    if(tcm) {
+        string fieldOptions[11] = {
+            "1. First Name", "2. Last Name", "3. Middle Name", "4. Birth Year",
+            "5. Position", "6. Degree", "7. Specialty", "8. Add Scientific Work", 
+            "9. Replace All Scientific Works", "10. Add Commission Work", 
+            "11. Replace All Commission Works"
+        };
+        drawMenu("Select Field", fieldOptions, 11);
+        fieldChoice = getChoice(11);
+    } else if(dynamic_cast<UniversityTeacher*>(human)) {
+        string fieldOptions[9] = {
+            "1. First Name", "2. Last Name", "3. Middle Name", "4. Birth Year",
+            "5. Position", "6. Degree", "7. Specialty", "8. Add Scientific Work", 
+            "9. Replace All Scientific Works"
+        };
+        drawMenu("Select Field", fieldOptions, 9);
+        fieldChoice = getChoice(9);
+    } else if(dynamic_cast<CommissionMember*>(human)) {
+        string fieldOptions[9] = {
+            "1. First Name", "2. Last Name", "3. Middle Name", "4. Birth Year",
+            "5. Commission Name", "6. Appointment Year", "7. Certificate Number", 
+            "8. Add Autobiography", "9. Replace All Autobiography"
+        };
+        drawMenu("Select Field", fieldOptions, 9);
+        fieldChoice = getChoice(9);
+    } else {
+        string fieldOptions[4] = {
+            "1. First Name", "2. Last Name", "3. Middle Name", "4. Birth Year"
+        };
+        drawMenu("Select Field", fieldOptions, 4);
+        fieldChoice = getChoice(4);
     }
     
-    drawMenu("Select Field Category", fieldOptions, numFieldOptions);
-    int fieldChoice = getChoice(numFieldOptions);
-    
-    if (fieldChoice == 1) {
-        updateHumanFields(human);
-    } else if (fieldChoice == 2 && teacher) {
-        updateTeacherFields(teacher);
-    } else if (fieldChoice == 3 && commissionMember) {
-        updateCommissionFields(commissionMember);
-    } else if (fieldChoice == 4 && teacherCommissionMember) {
-        updateTeacherCommissionMemberFields(teacherCommissionMember);
-    }
+    human->updatePerson(fieldChoice);
 }
 
 void peekObject(Deque<Human*>& deque) {

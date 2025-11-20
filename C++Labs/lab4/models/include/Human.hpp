@@ -42,6 +42,8 @@ public:
     void setBirthYear(int year);
     static void setSearchMode(SearchMode mode);
 
+    virtual void updatePerson(int fieldChoice);
+
     virtual void printHeader() const = 0;
     virtual void printTable() const = 0;
 };

@@ -140,3 +140,34 @@ void TeacherCommissionMember::printTable() const {
     cout << left;
     cout << "| " << setw(9) << getLastName() << " | " << setw(10) << getFirstName() << " | " << setw(11) << getMiddleName() << " | " << setw(10) << getBirthYear() << " | " << setw(8) << UniversityTeacher::getPosition() << " | " << setw(6) << UniversityTeacher::getAcademicDegree() << " | " << setw(9) << UniversityTeacher::getSpecialty() << " | " << setw(16) << scientificWorksStr << " | " << setw(9) << scientificWorksCount << " | " << setw(10) << CommissionMember::getCommissionName() << " | " << setw(12) << CommissionMember::getAppointmentYear() << " | " << setw(11) << CommissionMember::getCertificateNumber() << " | " << setw(13) << autobiographyStr << " | " << setw(9) << autobiographyCount << " | " << setw(10) << commissionWorksStr << " | " << setw(10) << commissionWorksCount << " |" << endl;
 }
+
+void TeacherCommissionMember::updatePerson(int fieldChoice){
+    string str;
+    int num;
+    if(fieldChoice <= 9) {
+        if(fieldChoice <= 4) {
+            Human::updatePerson(fieldChoice);
+        } else if(fieldChoice <= 9) {
+            UniversityTeacher::updatePerson(fieldChoice);
+        }
+        return;
+    }
+    
+    switch(fieldChoice) {
+        case 10:
+            cout << "New commission work: ";
+            cin >> str;
+            addCommissionWork(str);
+            break;
+        case 11:
+            cout << "Enter number of commission works (0-5): ";
+            cin >> num;
+            if(num > 5) num = 5;
+            for(int i = 0; i < num; i++) {
+                cout << "Commission work " << i+1 << ": ";
+                cin >> str;
+                setCommissionWork(i, str);
+            }
+            break;
+    }
+}

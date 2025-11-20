@@ -107,3 +107,45 @@ void CommissionMember::printTable() const {
     cout << left;
     cout << "| " << setw(9) << this->lastName << " | " << setw(10) << this->firstName << " | " << setw(11) << this->middleName << " | " << setw(10) << this->birthYear << " | " << setw(8) << " - " << " | " << setw(6) << " - " << " | " << setw(9) << " - " << " | " << setw(16) << " - " << " | " << setw(9) << " - " << " | " << setw(10) << this->commissionName << " | " << setw(12) << this->appointmentYear << " | " << setw(11) << this->certificateNumber << " | " << setw(13) << autobiographyStr << " | " << setw(9) << this->autobiographyCount << " | " << setw(10) << " - " << " | " << setw(10) << " - " << " |" << endl;
 }
+
+void CommissionMember::updatePerson(int fieldChoice){
+    string str;
+    int num;
+    if(fieldChoice <= 4) {
+        Human::updatePerson(fieldChoice);
+        return;
+    }
+    
+    switch(fieldChoice) {
+        case 5:
+            cout << "New commission name: ";
+            cin >> str;
+            setCommissionName(str);
+            break;
+        case 6:
+            cout << "New appointment year: ";
+            cin >> num;
+            setAppointmentYear(num);
+            break;
+        case 7:
+            cout << "New certificate number: ";
+            cin >> str;
+            setCertificateNumber(str);
+            break;
+        case 8:
+            cout << "New autobiography: ";
+            cin >> str;
+            addAutobiography(str);
+            break;
+        case 9:
+            cout << "Enter number of autobiography (0-10): ";
+            cin >> num;
+            if(num > 10) num = 10;
+            for(int i = 0; i < num; i++) {
+                cout << "Autobiography " << i+1 << ": ";
+                cin >> str;
+                setAutobiography(i, str);
+            }
+            break;
+    }
+}
