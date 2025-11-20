@@ -111,3 +111,26 @@ void Human::setMiddleName(const string& middle) { this->middleName = middle; }
 void Human::setBirthday(const Date& birth) { this->birthday = birth; }
 void Human::setSearchMode(SearchMode mode) { currentSearchMode = mode; }
 SearchMode Human::currentSearchMode = FULL_MATCH;
+
+void Human:: updateField(int fieldChoice) {
+    string str;
+    Date date;
+    switch(fieldChoice) {
+        case 1:
+            safeInputString(cin, str, Language::ENGLISH, "New first name (English only): ");
+            setFirstName(str);
+            break;
+        case 2:
+            safeInputString(cin, str, Language::ENGLISH, "New last name (English only): ");
+            setLastName(str);
+            break;
+        case 3:
+            safeInputString(cin, str, Language::ENGLISH, "New middle name (English only): ");
+            setMiddleName(str);
+            break;
+        case 4:
+            safeInputDate(cin, date, "DD/MM/YYYY", "New birthday: ");
+            setBirthday(date);
+            break;
+    }
+}

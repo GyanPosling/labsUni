@@ -143,3 +143,39 @@ void CommissionMember::printTable() const {
     cout << left;
     cout << "| " << setw(9) << this->lastName << " | " << setw(10) << this->firstName << " | " << setw(11) << this->middleName << " | " << setw(10) << this->birthday << " | " << setw(8) << " - " << " | " << setw(6) << " - " << " | " << setw(9) << " - " << " | " << setw(16) << " - " << " | " << setw(9) << " - " << " | " << setw(10) << this->commissionName << " | " << setw(12) << this->appointmentDate << " | " << setw(11) << this->certificateNumber << " | " << setw(13) << autobiographyStr << " | " << setw(9) << this->autobiographyCount << " | " << setw(10) << " - " << " | " << setw(10) << " - " << " |" << endl;
 }
+
+void CommissionMember::updateField(int fieldChoice) {
+    string str;
+    int num;
+    Date date;
+    if(fieldChoice <= 4) {
+        Human::updateField(fieldChoice);
+        return;
+    }
+    
+    switch(fieldChoice) {
+        case 5:
+            safeInputText(cin, str, "New commission name: ");
+            setCommissionName(str);
+            break;
+        case 6:
+            safeInputDate(cin, date, "DD/MM/YYYY", "New appointment date: ");
+            setAppointmentDate(date);
+            break;
+        case 7:
+            safeInputText(cin, str, "New certificate number: ");
+            setCertificateNumber(str);
+            break;
+        case 8:
+            safeInputText(cin, str, "New autobiography: ");
+            addAutobiography(str);
+            break;
+        case 9:
+            safeInputInt(cin, num, 0, AUTOBIOGRAPHY_SIZE, "Enter number of autobiography (0-" + to_string(AUTOBIOGRAPHY_SIZE) + "): ");
+            for(int i = 0; i < num; i++) {
+                safeInputText(cin, str, "Autobiography " + to_string(i+1) + ": ");
+                setAutobiography(i, str);
+            }
+            break;
+    }
+}

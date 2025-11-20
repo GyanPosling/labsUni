@@ -45,4 +45,6 @@ public:
 
     virtual void printHeader() const = 0;
     virtual void printTable() const = 0;
+
+    virtual void updateField(int fieldChioce);
 };

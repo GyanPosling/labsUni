@@ -142,3 +142,38 @@ void UniversityTeacher::printTable() const {
     cout << left;
     cout << "| " << setw(9) << this->lastName << " | " << setw(10) << this->firstName << " | " << setw(11) << this->middleName << " | " << setw(10) << this->birthday << " | " << setw(8) << this->position << " | " << setw(6) << this->academicDegree << " | " << setw(9) << this->specialty << " | " << setw(16) << scientificWorksStr << " | " << setw(9) << this->scientificWorksCount << " | " << setw(10) << " - " << " | " << setw(12) << " - " << " | " << setw(11) << " - " << " | " << setw(13) << " - " << " | " << setw(9) << " - " << " | " << setw(10) << " - " << " | " << setw(10) << " - " << " |" << endl;
 }
+
+ void UniversityTeacher:: updateField(int fieldChoice)  {
+    string str;
+    int num;
+    if(fieldChoice <= 4) {
+        Human::updateField(fieldChoice);
+        return;
+    }
+    
+    switch(fieldChoice) {
+        case 5:
+            safeInputText(cin, str, "New position: ");
+            setPosition(str);
+            break;
+        case 6:
+            safeInputText(cin, str, "New degree: ");
+            setAcademicDegree(str);
+            break;
+        case 7:
+            safeInputText(cin, str, "New specialty: ");
+            setSpecialty(str);
+            break;
+        case 8:
+            safeInputText(cin, str, "New scientific work: ");
+            addScientificWork(str);
+            break;
+        case 9:
+            safeInputInt(cin, num, 0, SCIENTIFIC_WORKS_SIZE, "Enter number of scientific works (0-" + to_string(SCIENTIFIC_WORKS_SIZE) + "): ");
+            for(int i = 0; i < num; i++) {
+                safeInputText(cin, str, "Scientific work " + to_string(i+1) + ": ");
+                setScientificWork(i, str);
+            }
+            break;
+    }
+}

@@ -40,5 +40,6 @@ public:
     void printHeader() const override;
     void printTable() const override;
     
+    void updateField(int fieldChoice) override;
 
 };

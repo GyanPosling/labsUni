@@ -190,3 +190,30 @@ void TeacherCommissionMember::printTable() const {
     cout << left;
     cout << "| " << setw(9) << getLastName() << " | " << setw(10) << getFirstName() << " | " << setw(11) << getMiddleName() << " | " << setw(10) << getBirthday() << " | " << setw(8) << UniversityTeacher::getPosition() << " | " << setw(6) << UniversityTeacher::getAcademicDegree() << " | " << setw(9) << UniversityTeacher::getSpecialty() << " | " << setw(16) << scientificWorksStr << " | " << setw(9) << scientificWorksCount << " | " << setw(10) << CommissionMember::getCommissionName() << " | " << setw(12) << CommissionMember::getAppointmentDate() << " | " << setw(11) << CommissionMember::getCertificateNumber() << " | " << setw(13) << autobiographyStr << " | " << setw(9) << autobiographyCount << " | " << setw(10) << commissionWorksStr << " | " << setw(10) << commissionWorksCount << " |" << endl;
 }
+
+void TeacherCommissionMember::updateField(int fieldChoice) {
+    string str;
+    int num;
+    if(fieldChoice <= 9) {
+        if(fieldChoice <= 4) {
+            Human::updateField(fieldChoice);
+        } else if(fieldChoice <= 9) {
+            UniversityTeacher::updateField(fieldChoice);
+        }
+        return;
+    }
+    
+    switch(fieldChoice) {
+        case 10:
+            safeInputText(cin, str, "New commission work: ");
+            addCommissionWork(str);
+            break;
+        case 11:
+            safeInputInt(cin, num, 0, COMMISSION_WORKS_SIZE, "Enter number of commission works (0-" + to_string(COMMISSION_WORKS_SIZE) + "): ");
+            for(int i = 0; i < num; i++) {
+                safeInputText(cin, str, "Commission work " + to_string(i+1) + ": ");
+                setCommissionWork(i, str);
+            }
+            break;
+    }
+}
