@@ -3,6 +3,34 @@
 #include <algorithm>
 #include <limits>
 
+void safeGetLine(std::istream& is, std::string& value, Language lang, const std::string& prompt) {
+    if (!prompt.empty()) {
+        std::cout << prompt;
+    }
+    
+    std::string input;
+    std::getline(is, input);
+    
+    if (input.empty()) {
+        throw InputException(5, "Empty input. Please enter a non-empty string.");
+    }
+    
+    bool isValid = false;
+    if (lang == Language::ENGLISH) {
+        isValid = isEnglishOnly(input);
+        if (!isValid) {
+            throw InputException(6, "Invalid input. String must contain only English letters. Got: " + input);
+        }
+    } else if (lang == Language::RUSSIAN) {
+        isValid = isRussianOnly(input);
+        if (!isValid) {
+            throw InputException(7, "Invalid input. String must contain only Russian letters. Got: " + input);
+        }
+    }
+    
+    value = input;
+}
+
 void safeInputInt(std::istream& is, int& value, int min, int max, const std::string& prompt) {
     if (!prompt.empty()) {
         std::cout << prompt;
@@ -34,41 +62,12 @@ void safeInputInt(std::istream& is, int& value, int min, int max, const std::str
     value = temp;
 }
 
-void safeInputString(std::istream& is, std::string& value, Language lang, const std::string& prompt) {
-    if (!prompt.empty()) {
-        std::cout << prompt;
-    }
-    
-    std::string input;
-    std::getline(is, input);
-    
-    if (input.empty()) {
-        throw InputException(5, "Empty input. Please enter a non-empty string.");
-    }
-    
-    bool isValid = false;
-    if (lang == Language::ENGLISH) {
-        isValid = isEnglishOnly(input);
-        if (!isValid) {
-            throw InputException(6, "Invalid input. String must contain only English letters. Got: " + input);
-        }
-    } else if (lang == Language::RUSSIAN) {
-        isValid = isRussianOnly(input);
-        if (!isValid) {
-            throw InputException(7, "Invalid input. String must contain only Russian letters. Got: " + input);
-        }
-    }
-    
-    value = input;
-}
-
 void safeInputDate(std::istream& is, Date& value, const std::string& format, const std::string& prompt) {
-    if (!prompt.empty()) {
-        std::cout << prompt;
-    }
-    
     if (!format.empty()) {
         std::cout << "Format: " << format << std::endl;
+    }
+    if (!prompt.empty()) {
+        std::cout << prompt;
     }
     
     std::string input;
@@ -104,29 +103,7 @@ void safeInputDate(std::istream& is, Date& value, const std::string& format, con
 }
 
 void safeInputText(std::istream& is, std::string& value, const std::string& prompt) {
-    if (!prompt.empty()) {
-        std::cout << prompt;
-    }
-    
-    std::string input;
-    std::getline(is, input);
-    
-    if (input.empty()) {
-        throw InputException(13, "Empty input. Please enter text.");
-    }
-    
-    value = input;
-}
-
-void safeGetLine(std::istream& is, std::string& value, const std::string& prompt) {
-    if (!prompt.empty()) {
-        std::cout << prompt;
-    }
-    
-    std::string input;
-    std::getline(is, input);
-    
-    value = input;
+    safeGetLine(is, value, Language::ENGLISH, prompt);
 }
 
 bool isEnglishOnly(const std::string& str) {
@@ -157,4 +134,3 @@ bool isRussianOnly(const std::string& str) {
     }
     return true;
 }
-

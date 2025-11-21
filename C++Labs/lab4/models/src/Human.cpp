@@ -84,22 +84,22 @@ void  Human::updatePerson(int fieldChoice) {
         case 1:
             cout << "New first name: ";
             cin >> str;
-            setFirstName(str);
+            this->setFirstName(str);
             break;
         case 2:
             cout << "New last name: ";
             cin >> str;
-            setLastName(str);
+            this->setLastName(str);
             break;
         case 3:
             cout << "New middle name: ";
             cin >> str;
-            setMiddleName(str);
+            this->setMiddleName(str);
             break;
         case 4:
             cout << "New birth year: ";
             cin >> num;
-            setBirthYear(num);
+            this->setBirthYear(num);
             break;
     }
 }

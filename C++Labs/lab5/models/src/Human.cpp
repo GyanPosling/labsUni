@@ -37,7 +37,6 @@ bool Human::operator==(const Human& other) const {
     return false;
 }
 
-
 bool Human::operator<(const Human& other) const {
     if (currentSearchMode == LAST_NAME) {
         return this->lastName < other.lastName;
@@ -60,7 +59,7 @@ istream& operator>>(istream& is, Human& human) {
     bool success = false;
     while (!success) {
         try {
-            safeInputString(is, human.lastName, Language::ENGLISH, "Enter last name (English only): ");
+            safeGetLine(is, human.lastName, Language::ENGLISH, "Enter last name (English only): ");
             success = true;
         } catch (const InputException& e) {
             cout << "Error: " << e.what() << endl;
@@ -70,7 +69,7 @@ istream& operator>>(istream& is, Human& human) {
     success = false;
     while (!success) {
         try {
-            safeInputString(is, human.firstName, Language::ENGLISH, "Enter first name (English only): ");
+            safeGetLine(is, human.firstName, Language::ENGLISH, "Enter first name (English only): ");
             success = true;
         } catch (const InputException& e) {
             cout << "Error: " << e.what() << endl;
@@ -80,7 +79,7 @@ istream& operator>>(istream& is, Human& human) {
     success = false;
     while (!success) {
         try {
-            safeInputString(is, human.middleName, Language::ENGLISH, "Enter middle name (English only): ");
+            safeGetLine(is, human.middleName, Language::ENGLISH, "Enter middle name (English only): ");
             success = true;
         } catch (const InputException& e) {
             cout << "Error: " << e.what() << endl;
@@ -112,20 +111,20 @@ void Human::setBirthday(const Date& birth) { this->birthday = birth; }
 void Human::setSearchMode(SearchMode mode) { currentSearchMode = mode; }
 SearchMode Human::currentSearchMode = FULL_MATCH;
 
-void Human:: updateField(int fieldChoice) {
+void Human::updateField(int fieldChoice) {
     string str;
     Date date;
     switch(fieldChoice) {
         case 1:
-            safeInputString(cin, str, Language::ENGLISH, "New first name (English only): ");
+            safeGetLine(cin, str, Language::ENGLISH, "New first name (English only): ");
             setFirstName(str);
             break;
         case 2:
-            safeInputString(cin, str, Language::ENGLISH, "New last name (English only): ");
+            safeGetLine(cin, str, Language::ENGLISH, "New last name (English only): ");
             setLastName(str);
             break;
         case 3:
-            safeInputString(cin, str, Language::ENGLISH, "New middle name (English only): ");
+            safeGetLine(cin, str, Language::ENGLISH, "New middle name (English only): ");
             setMiddleName(str);
             break;
         case 4:

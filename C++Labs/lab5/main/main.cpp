@@ -11,6 +11,7 @@
 #include "../exceptions/include/Date.hpp"
 using namespace std;
 
+Language currentLang = Language::ENGLISH;
 
 void drawMenu(const string& title, const string options[], int numOptions) {
     int max_len = title.length();
@@ -27,28 +28,32 @@ void drawMenu(const string& title, const string options[], int numOptions) {
     cout << "+" << string(max_len, '-') << "+" << endl;
 }
 
-int getChoice(int max) {
-    int choice;
+void addObject(Deque<Human*>& deque) {
+    string sideOptions[2] = {"1. Add to Front", "2. Add to Back"};
+    drawMenu("Select Side", sideOptions, 2);
+    int sideChoice;
     bool success = false;
     while (!success) {
         try {
-            safeInputInt(cin, choice, 1, max, "Enter choice (1-" + to_string(max) + "): ");
+            safeInputInt(cin, sideChoice, 1, 2, "Enter choice (1-2): ");
             success = true;
         } catch (const InputException& e) {
             cout << "Error: " << e.what() << endl;
         }
     }
-    return choice;
-}
-
-void addObject(Deque<Human*>& deque) {
-    string sideOptions[2] = {"1. Add to Front", "2. Add to Back"};
-    drawMenu("Select Side", sideOptions, 2);
-    int sideChoice = getChoice(2);
     
     string typeOptions[3] = {"1. Teacher", "2. Commission Member", "3. Teacher Commission Member"};
     drawMenu("Select Type", typeOptions, 3);
-    int typeChoice = getChoice(3);
+    int typeChoice;
+    success = false;
+    while (!success) {
+        try {
+            safeInputInt(cin, typeChoice, 1, 3, "Enter choice (1-3): ");
+            success = true;
+        } catch (const InputException& e) {
+            cout << "Error: " << e.what() << endl;
+        }
+    }
     
     Human* object;
     if (typeChoice == 1) {
@@ -75,7 +80,16 @@ void addObject(Deque<Human*>& deque) {
 void removeObject(Deque<Human*>& deque) {
     string options[2] = {"1. Remove from Front", "2. Remove from Back"};
     drawMenu("Remove Object", options, 2);
-    int choice = getChoice(2);
+    int choice;
+    bool success = false;
+    while (!success) {
+        try {
+            safeInputInt(cin, choice, 1, 2, "Enter choice (1-2): ");
+            success = true;
+        } catch (const InputException& e) {
+            cout << "Error: " << e.what() << endl;
+        }
+    }
     
     if (deque.isEmpty()) {
         cout << "Deque is empty." << endl;
@@ -96,7 +110,16 @@ void removeObject(Deque<Human*>& deque) {
 void modifyObject(Deque<Human*>& deque) {
     string sideOptions[2] = {"1. Modify First", "2. Modify Last"};
     drawMenu("Select Object to Modify", sideOptions, 2);
-    int sideChoice = getChoice(2);
+    int sideChoice;
+    bool success = false;
+    while (!success) {
+        try {
+            safeInputInt(cin, sideChoice, 1, 2, "Enter choice (1-2): ");
+            success = true;
+        } catch (const InputException& e) {
+            cout << "Error: " << e.what() << endl;
+        }
+    }
     
     if(deque.isEmpty()) {
         cout << "Deque is empty." << endl;
@@ -107,7 +130,16 @@ void modifyObject(Deque<Human*>& deque) {
     
     string modifyOptions[2] = {"1. Change All Data", "2. Change Specific Field"};
     drawMenu("Modify Options", modifyOptions, 2);
-    int modifyChoice = getChoice(2);
+    int modifyChoice;
+    success = false;
+    while (!success) {
+        try {
+            safeInputInt(cin, modifyChoice, 1, 2, "Enter choice (1-2): ");
+            success = true;
+        } catch (const InputException& e) {
+            cout << "Error: " << e.what() << endl;
+        }
+    }
     
     if(modifyChoice == 1) {
         TeacherCommissionMember* tcm = dynamic_cast<TeacherCommissionMember*>(human);
@@ -137,7 +169,15 @@ void modifyObject(Deque<Human*>& deque) {
             "11. Replace All Commission Works"
         };
         drawMenu("Select Field", fieldOptions, 11);
-        fieldChoice = getChoice(11);
+        success = false;
+        while (!success) {
+            try {
+                safeInputInt(cin, fieldChoice, 1, 11, "Enter choice (1-11): ");
+                success = true;
+            } catch (const InputException& e) {
+                cout << "Error: " << e.what() << endl;
+            }
+        }
     } else if(dynamic_cast<UniversityTeacher*>(human)) {
         string fieldOptions[9] = {
             "1. First Name", "2. Last Name", "3. Middle Name", "4. Birthday",
@@ -145,7 +185,15 @@ void modifyObject(Deque<Human*>& deque) {
             "9. Replace All Scientific Works"
         };
         drawMenu("Select Field", fieldOptions, 9);
-        fieldChoice = getChoice(9);
+        success = false;
+        while (!success) {
+            try {
+                safeInputInt(cin, fieldChoice, 1, 9, "Enter choice (1-9): ");
+                success = true;
+            } catch (const InputException& e) {
+                cout << "Error: " << e.what() << endl;
+            }
+        }
     } else if(dynamic_cast<CommissionMember*>(human)) {
         string fieldOptions[9] = {
             "1. First Name", "2. Last Name", "3. Middle Name", "4. Birthday",
@@ -153,13 +201,29 @@ void modifyObject(Deque<Human*>& deque) {
             "8. Add Autobiography", "9. Replace All Autobiography"
         };
         drawMenu("Select Field", fieldOptions, 9);
-        fieldChoice = getChoice(9);
+        success = false;
+        while (!success) {
+            try {
+                safeInputInt(cin, fieldChoice, 1, 9, "Enter choice (1-9): ");
+                success = true;
+            } catch (const InputException& e) {
+                cout << "Error: " << e.what() << endl;
+            }
+        }
     } else {
         string fieldOptions[4] = {
             "1. First Name", "2. Last Name", "3. Middle Name", "4. Birthday"
         };
         drawMenu("Select Field", fieldOptions, 4);
-        fieldChoice = getChoice(4);
+        success = false;
+        while (!success) {
+            try {
+                safeInputInt(cin, fieldChoice, 1, 4, "Enter choice (1-4): ");
+                success = true;
+            } catch (const InputException& e) {
+                cout << "Error: " << e.what() << endl;
+            }
+        }
     }
     
     try {
@@ -173,7 +237,16 @@ void modifyObject(Deque<Human*>& deque) {
 void peekObject(Deque<Human*>& deque) {
     string options[2] = {"1. Peek First", "2. Peek Last"};
     drawMenu("Peek Object", options, 2);
-    int choice = getChoice(2);
+    int choice;
+    bool success = false;
+    while (!success) {
+        try {
+            safeInputInt(cin, choice, 1, 2, "Enter choice (1-2): ");
+            success = true;
+        } catch (const InputException& e) {
+            cout << "Error: " << e.what() << endl;
+        }
+    }
     
     if (deque.isEmpty()) {
         cout << "Deque is empty." << endl;
@@ -223,7 +296,16 @@ void searchInDeque(Deque<Human*>& deque) {
 
     string searchOptions[5] = {"1. Search by Last Name", "2. Search by First Name", "3. Search by Middle Name", "4. Search by Birthday", "5. Search by Full Match (all fields)"};
     drawMenu("Search Options", searchOptions, 5);
-    int choice = getChoice(5);
+    int choice;
+    bool success = false;
+    while (!success) {
+        try {
+            safeInputInt(cin, choice, 1, 5, "Enter choice (1-5): ");
+            success = true;
+        } catch (const InputException& e) {
+            cout << "Error: " << e.what() << endl;
+        }
+    }
 
     string searchString;
     Date searchDate;
@@ -232,10 +314,10 @@ void searchInDeque(Deque<Human*>& deque) {
     UniversityTeacher* searchObj = new UniversityTeacher("", "", "", defaultDate, "", "", "");
 
     if (choice == 1) {
-        bool success = false;
+        success = false;
         while (!success) {
             try {
-                safeInputString(cin, searchString, Language::ENGLISH, "Enter last name to search (English only): ");
+                safeGetLine(cin, searchString, currentLang, "Enter last name to search (English only): ");
                 searchObj->setLastName(searchString);
                 Human::setSearchMode(LAST_NAME);
                 success = true;
@@ -244,10 +326,10 @@ void searchInDeque(Deque<Human*>& deque) {
             }
         }
     } else if (choice == 2) {
-        bool success = false;
+        success = false;
         while (!success) {
             try {
-                safeInputString(cin, searchString, Language::ENGLISH, "Enter first name to search (English only): ");
+                safeGetLine(cin, searchString, currentLang, "Enter first name to search (English only): ");
                 searchObj->setFirstName(searchString);
                 Human::setSearchMode(FIRST_NAME);
                 success = true;
@@ -256,10 +338,10 @@ void searchInDeque(Deque<Human*>& deque) {
             }
         }
     } else if (choice == 3) {
-        bool success = false;
+        success = false;
         while (!success) {
             try {
-                safeInputString(cin, searchString, Language::ENGLISH, "Enter middle name to search (English only): ");
+                safeGetLine(cin, searchString, currentLang, "Enter middle name to search (English only): ");
                 searchObj->setMiddleName(searchString);
                 Human::setSearchMode(MIDDLE_NAME);
                 success = true;
@@ -268,7 +350,7 @@ void searchInDeque(Deque<Human*>& deque) {
             }
         }
     } else if (choice == 4) {
-        bool success = false;
+        success = false;
         while (!success) {
             try {
                 safeInputDate(cin, searchDate, "DD/MM/YYYY", "Enter birthday to search: ");
@@ -282,10 +364,10 @@ void searchInDeque(Deque<Human*>& deque) {
     } else { 
         cout << "Enter criteria for Full Match:" << endl;
         
-        bool success = false;
+        success = false;
         while (!success) {
             try {
-                safeInputString(cin, searchString, Language::ENGLISH, "Enter last name (English only): ");
+                safeGetLine(cin, searchString, currentLang, "Enter last name (English only): ");
                 searchObj->setLastName(searchString);
                 success = true;
             } catch (const InputException& e) {
@@ -296,7 +378,7 @@ void searchInDeque(Deque<Human*>& deque) {
         success = false;
         while (!success) {
             try {
-                safeInputString(cin, searchString, Language::ENGLISH, "Enter first name (English only): ");
+                safeGetLine(cin, searchString, currentLang, "Enter first name (English only): ");
                 searchObj->setFirstName(searchString);
                 success = true;
             } catch (const InputException& e) {
@@ -307,7 +389,7 @@ void searchInDeque(Deque<Human*>& deque) {
         success = false;
         while (!success) {
             try {
-                safeInputString(cin, searchString, Language::ENGLISH, "Enter middle name (English only): ");
+                safeGetLine(cin, searchString, currentLang, "Enter middle name (English only): ");
                 searchObj->setMiddleName(searchString);
                 success = true;
             } catch (const InputException& e) {
@@ -357,7 +439,16 @@ void sortDequeByField(Deque<Human*>& deque) {
     }
     string sortOptions[4] = {"1. Sort by Last Name", "2. Sort by First Name", "3. Sort by Middle Name", "4. Sort by Birth Year"};
     drawMenu("Sort Options", sortOptions, 4);
-    int choice = getChoice(4); 
+    int choice;
+    bool success = false;
+    while (!success) {
+        try {
+            safeInputInt(cin, choice, 1, 4, "Enter choice (1-4): ");
+            success = true;
+        } catch (const InputException& e) {
+            cout << "Error: " << e.what() << endl;
+        }
+    }
 
     if (choice == 1) {
         Human::setSearchMode(LAST_NAME);
@@ -400,7 +491,15 @@ void run(){
     
     do {
         drawMenu("Main Menu", mainMenuOptions, 8);
-        choice = getChoice(8);
+        bool success = false;
+        while (!success) {
+            try {
+                safeInputInt(cin, choice, 1, 8, "Enter choice (1-8): ");
+                success = true;
+            } catch (const InputException& e) {
+                cout << "Error: " << e.what() << endl;
+            }
+        }
         
         switch (choice) {
             case 1: addObject(myDeque); break;

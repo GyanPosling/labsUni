@@ -11,15 +11,13 @@ enum class Language {
     RUSSIAN
 };
 
+void safeGetLine(std::istream& is, std::string& value, Language lang, const std::string& prompt = "");
+
 void safeInputInt(std::istream& is, int& value, int min = std::numeric_limits<int>::min(), int max = std::numeric_limits<int>::max(), const std::string& prompt = "");
 
-void safeInputString(std::istream& is, std::string& value, Language lang, const std::string& prompt = "");
-
-void safeInputDate(std::istream& is, Date& value, const std::string& format, const std::string& prompt = "");
+void safeInputDate(std::istream& is, Date& value, const std::string& format = "", const std::string& prompt = "");
 
 void safeInputText(std::istream& is, std::string& value, const std::string& prompt = "");
-
-void safeGetLine(std::istream& is, std::string& value, const std::string& prompt = "");
 
 bool isEnglishOnly(const std::string& str);
 
