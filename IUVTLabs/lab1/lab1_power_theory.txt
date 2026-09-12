@@ -391,7 +391,7 @@ BOOLEAN SetSuspendState(
 2. Открыть устройство через CreateFileW.
 3. Получить тег батареи через IOCTL_BATTERY_QUERY_TAG.
 4. Запросить информацию через IOCTL_BATTERY_QUERY_INFORMATION.
-
+k;sldkfsfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdf
 В результате можно получить структуру BATTERY_INFORMATION.
 
 Важные поля BATTERY_INFORMATION:

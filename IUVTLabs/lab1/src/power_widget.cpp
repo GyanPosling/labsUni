@@ -295,6 +295,7 @@ void PowerWidget::contextMenuEvent(QContextMenuEvent *event)
     QAction *sleepAction = menu.addAction(QString::fromUtf8("🌙  Спящий режим"));
     QAction *hibernateAction = menu.addAction(QString::fromUtf8("💗  Гибернация"));
     menu.addSeparator();
+    QAction *batteryInfoAction = menu.addAction(QString::fromUtf8("Информация о батарее"));
     QAction *logAction = menu.addAction(QString::fromUtf8("📖  Показать полный журнал"));
     menu.addSeparator();
     QAction *autostartAction = menu.addAction(QString::fromUtf8("Автозапуск при старте Windows"));
@@ -303,6 +304,7 @@ void PowerWidget::contextMenuEvent(QContextMenuEvent *event)
 
     connect(sleepAction, &QAction::triggered, this, &PowerWidget::sleepSystem);
     connect(hibernateAction, &QAction::triggered, this, &PowerWidget::hibernateSystem);
+    connect(batteryInfoAction, &QAction::triggered, this, &PowerWidget::showBatteryInfo);
     connect(logAction, &QAction::triggered, this, &PowerWidget::openLog);
     connect(
         autostartAction,
@@ -325,6 +327,50 @@ void PowerWidget::refreshView()
     // PowerManager::update() emits informationChanged().
     // Calling update() here again would create an infinite signal recursion.
     update();
+}
+
+void PowerWidget::showBatteryInfo()
+{
+    m_manager.update();
+
+    const PowerInfo &info = m_manager.info();
+
+    const QString powerSource = info.charging
+        ? "Заряжается"
+        : (info.acConnected ? "Питание от сети" : "Питание от батареи");
+
+    const QString charge = info.batteryPercent >= 0
+        ? QString("%1%").arg(info.batteryPercent)
+        : "нет данных";
+
+    const QString designedCapacity = info.designedCapacityMWh >= 0
+        ? QString("%1 mWh").arg(info.designedCapacityMWh)
+        : "нет данных";
+
+    const QString fullCapacity = info.fullChargeCapacityMWh >= 0
+        ? QString("%1 mWh").arg(info.fullChargeCapacityMWh)
+        : "нет данных";
+
+    const QString wear = info.wearPercent >= 0
+        ? QString("%1%").arg(info.wearPercent)
+        : "нет данных";
+
+    const QString text =
+        "Источник питания: " + powerSource + "\n" +
+        "Уровень заряда: " + charge + "\n" +
+        "Оставшееся время: " + remainingTime(info.remainingSeconds).remove("Осталось: ") + "\n\n" +
+        "Тип аккумулятора: " + info.batteryType + "\n" +
+        "Проектная ёмкость: " + designedCapacity + "\n" +
+        "Полная ёмкость: " + fullCapacity + "\n" +
+        "Степень износа: " + wear + "\n\n" +
+        "Спящий режим: " + QString(info.sleepSupported ? "доступен" : "недоступен") + "\n" +
+        "Modern Standby: " + QString(info.modernStandbySupported ? "да" : "нет") + "\n" +
+        "Гибернация: " + QString(info.hibernateSupported ? "доступна" : "недоступна");
+
+    QMessageBox::information(
+        this,
+        "Информация о батарее",
+        text);
 }
 
 void PowerWidget::openLog()

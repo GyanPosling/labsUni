@@ -27,6 +27,7 @@ protected:
 
 private slots:
     void refreshView();
+    void showBatteryInfo();
     void openLog();
     void sleepSystem();
     void hibernateSystem();
